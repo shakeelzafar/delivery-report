@@ -1,0 +1,140 @@
+﻿@{
+    Layout = null;
+    List<Dictionary<string, object>> SalesOrders = (List<Dictionary<string, object>>)Session["SalesOrders"];
+    List<Dictionary<string, object>> PurchaseOrders = (List<Dictionary<string, object>>)Session["PurchaseOrders"];
+    List<Dictionary<string, object>> WorkOrders = (List<Dictionary<string, object>>)Session["WorkOrders"];
+    //List<Dictionary<string, object>> Products = (List<Dictionary<string, object>>)Session["Products"];
+    List<Dictionary<string, object>> SupplierClients = (List<Dictionary<string, object>>)Session["SupplierClients"];
+}
+<html>
+<head>
+    <link rel="stylesheet" type="text/css" href="../../Content/jquery.dataTables.css">
+     <title>Delivery Report Table</title>
+
+</head>
+<body>
+   
+    <table id="example"   cellspacing="0" width="100%">
+        <thead>
+            <tr>
+                <th>Date</th>
+                <th>Due Date</th>
+                <th>Receipt #</th>
+                <th>Customer and Product detials</th>
+                <th>Qty.</th>
+                <th>Phone No.</th>
+                <th>Status</th>
+          
+                <th>Recieveables</th>
+            </tr>
+        </thead>
+        <tfoot>
+            <tr>
+                <th>Date</th>
+                <th>Due Date</th>
+                <th>Receipt #</th>
+                <th>Customer and Product detials</th>
+                <th>Qty.</th>
+                <th>Phone No.</th>
+                <th>Status</th>
+                
+                <th>Recieveables</th>
+            </tr>
+        </tfoot>
+        <tbody>
+            @foreach(Dictionary<string, object> salesObj in SalesOrders)
+            { 
+            <tr>
+                <td>@salesObj.First(x => x.Key.Equals("SalesOrderCreationDate")).Value.ToString()</td>
+                <td>@salesObj.First(x => x.Key.Equals("SalesOrderLastUpdatedDate")).Value.ToString()</td>
+                <td>@salesObj.First(x => x.Key.Equals("SalesOrderNo")).Value.ToString()</td>
+                @foreach(Dictionary<string,object> client in SupplierClients)
+                {
+                    if (salesObj.First(x => x.Key.Equals("SalesOrderClientID")).Value.ToString().Equals(client.First(x => x.Key.Equals("SupplierClientID")).Value.ToString())) 
+                    { 
+                        <td>@client.First(x => x.Key.Equals("SupplierClientName")).Value.ToString()</td>
+                        <td>@client.First(x => x.Key.Equals("SupplierClientPhone1")).Value.ToString()</td>
+                    }
+                       
+                }
+                
+
+                <td>@salesObj.First(x => x.Key.Equals("SalesOrderTotalQuantity")).Value.ToString()</td>
+                <td>@salesObj.First(x => x.Key.Equals("SalesOrderStatus")).Value.ToString()</td>
+                <td>@salesObj.First(x => x.Key.Equals("SalesOrderAmountGrandTotal")).Value.ToString()</td>
+                
+            </tr>
+                
+             foreach(Dictionary<string,object> purchase in PurchaseOrders)
+              { 
+                
+                 if (salesObj.First(x => x.Key.Equals("SalesOrderReferenceNo")).Value.ToString().Equals(purchase.First(x => x.Key.Equals("PurchaseOrderReferenceNo")).Value.ToString()))
+                 {
+                     
+                     object [] obs= (object [])purchase.First(x => x.Key.Equals("PurchaseOrderDetails")).Value;
+                     
+                    foreach(Dictionary<string, object> products in obs)
+                    {
+                         <tr>
+                        <td>-</td>
+                        <td>PO-@purchase.First(x => x.Key.Equals("PurchaseOrderNo")).Value.ToString()</td>
+                         <td>@products.First(x => x.Key.Equals("PurchaseOrderRowProductSKU")).Value.ToString()</td>
+                         <td>@products.First(x => x.Key.Equals("PurchaseOrderRowProductDescription")).Value.ToString()</td>
+                         <td>@products.First(x => x.Key.Equals("PurchaseOrderRowQuantity")).Value.ToString()</td>
+                       <td>-</td>
+                        <td>-</td>
+                         <td>-</td> 
+                       </tr>
+                    }
+                  }
+
+              }
+             foreach (Dictionary<string, object> purchase in WorkOrders)
+             {
+
+                 if (salesObj.First(x => x.Key.Equals("SalesOrderReferenceNo")).Value.ToString().Equals(purchase.First(x => x.Key.Equals("WorkOrderComments")).Value.ToString()))
+                 {
+                     
+                     object [] obs= (object [])purchase.First(x => x.Key.Equals("WorkOrderDetails")).Value;
+                     
+                    foreach(Dictionary<string, object> products in obs)
+                    {
+                         <tr>
+                        <td>-</td>
+                        <td>WO-@purchase.First(x => x.Key.Equals("WorkOrderNo")).Value.ToString()</td>
+                         <td>@products.First(x => x.Key.Equals("WorkOrderBOMRowProductSKU")).Value.ToString()</td>
+                         <td>@products.First(x => x.Key.Equals("WorkOrderBOMRowProductDescription")).Value.ToString()</td>
+                         <td>@products.First(x => x.Key.Equals("WorkOrderBOMRowOrderedQuantity")).Value.ToString()</td>
+                       <td>-</td>
+                        <td>-</td>
+                         <td>-</td> 
+                       </tr>
+                    }
+                  } 
+         
+             }
+             
+              
+            }
+            
+            
+        </tbody>
+    </table>
+
+
+    <script type="text/javascript" charset="utf8" src="../../Content/jquery-1.8.2.min.js"></script>
+    <script type="text/javascript" charset="utf8" src="../../Content/jquery.dataTables.min.js"></script>
+    <script> 
+
+        //$(function () {
+        //    $("#example").dataTable();
+        //})
+    </script>
+</body>
+</html>
+
+
+
+
+
+ 
