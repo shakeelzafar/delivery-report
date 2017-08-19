@@ -12,9 +12,23 @@
     <meta name="author" content="">
     <link rel="icon" href="https://getbootstrap.com/docs/3.3/favicon.ico">
 
+    <script src="https://printjs-4de6.kxcdn.com/print.min.js"></script>
+    <script>
+        function call_download()
+        {
+            alert("here we go.");
+            printJS('docs/PrintJS.pdf');
+        }
+    </script>
+    
+    
+    <link href="https://printjs-4de6.kxcdn.com/print.min.css" rel="stylesheet">
+
+
     <title>APIKEY | Input</title>
 
-    <!-- Bootstrap core CSS -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+       <!-- Bootstrap core CSS -->
     <link href="https://getbootstrap.com/docs/3.3/dist/css/bootstrap.min.css" rel="stylesheet">
 
     <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
@@ -36,6 +50,8 @@
 
 <body>
 
+    <input type="button" value="submit" onclick="call_download()" />
+
     <h3 style="margin-top:10%" class="col-lg-5 col-lg-offset-5 col-md-5 col-md-offset-5 col-sm-5 col-sm-offset-5 form-signin-heading">Please enter your APIKEY.</h3>
     <div class="col-lg-3 col-lg-offset-5 col-md-3 col-md-offset-5 col-sm-3 col-sm-offset-5">
 
@@ -50,7 +66,6 @@
         </form>
 
     </div> <!-- /container -->
-    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
-    <script src="https://getbootstrap.com/docs/3.3/assets/js/ie10-viewport-bug-workaround.js"></script>
+    
 </body>
 </html>

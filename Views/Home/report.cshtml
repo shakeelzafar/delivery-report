@@ -3,65 +3,178 @@
     List<Dictionary<string, object>> SalesOrders = (List<Dictionary<string, object>>)Session["SalesOrders"];
     List<Dictionary<string, object>> PurchaseOrders = (List<Dictionary<string, object>>)Session["PurchaseOrders"];
     List<Dictionary<string, object>> WorkOrders = (List<Dictionary<string, object>>)Session["WorkOrders"];
-    //List<Dictionary<string, object>> Products = (List<Dictionary<string, object>>)Session["Products"];
+    List<Dictionary<string, object>> Products = (List<Dictionary<string, object>>)Session["Products"];
     List<Dictionary<string, object>> SupplierClients = (List<Dictionary<string, object>>)Session["SupplierClients"];
+    int srNo = 0;
 }
 <html>
 <head>
-    <link rel="stylesheet" type="text/css" href="../../Content/jquery.dataTables.css">
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.15/css/jquery.dataTables.min.css">
     <title>Delivery Report Table</title>
 
 </head>
-<body>
+<body style="background-color: #f2f4f7">
 
+    <div>
+        <table style="width:100%;border-collapse:collapse; " width="100%">
+            <tbody>
+                <tr><td rowspan="5" style="border:1px solid black;padding:5px; "><div style="width:90%"><img src="../../Content/logo20.png"/></div> </td><td colspan="2" rowspan="1" style="border: 1px solid black; padding: 5px; text-align: center;"><span style="font-size: 10pt;"><span style="font-size: 8pt;"><strong><a style="background-color: #f2f4f7; text-decoration-style: initial; text-decoration-color: initial;">Email: sales@profineworld.com,&nbsp;&nbsp;</a><a target="_blank" style="background-color: #f2f4f7; text-decoration-style: initial; text-decoration-color: initial;">www.profineworld.com</a></strong></span><span style="font-size: 8pt;">&nbsp;</span></span></td></tr>
+                <tr><td class="text-center" style="border:1px solid black;padding:5px;width:30% "><div><p style="font-weight:bold;text-align:center"><span style="font-size: 8pt;">Display &amp; head office</span></p></div></td><td class="text-center" style="border:1px solid black;padding:5px;width:40%;"><div><p style="font-weight:bold;text-align:center"><span style="font-size: 8pt;">Gulberg Display</span></p></div></td></tr>
+                <tr><td class="text-center" style="border:1px solid black;padding:5px"><div><p style="text-align:center"><span style="font-size: 8pt;"><span style="font-size: 10pt;"><span style="font-size: 8pt;">6 Mecleod Road, Lahore,Tel:042-37226257,Cell: 03244896776</span>  </span></span></p></div></td><td class="text-center" style="border:1px solid black;padding:5px"><div><p style="text-align:center"><span style="font-size: 8pt;">119-P M.M Alam road, Gulberg 2,Lahore, Tel:042-35778848, Cell: 0302-8427699</span></p></div></td></tr>
+
+                <tr><td rowspan="2" colspan="2" style="border-bottom:1px solid black; border-right:1px solid black"><div><p style="font-weight:bold;text-align:center; margin-bottom:-3px; "><span style="font-size: 8pt;">Islamabad Dealership</span></p><p style="text-align:center;font-size: 8pt; ">Plaza #: 39, Main Golra Rd, Service Lane, Near Audi Center, Islamabad, Tel: 051 5495731</p></div></td></tr>
+            </tbody>
+        </table>
+
+       
+    </div><br />
+    
+    <h3 style="font-weight:bold;text-align:center;padding-top:3px; padding-bottom:2px; border-bottom: 2px solid #000000; border-top: 2px solid #000000;margin-bottom:15px">Delivery Products Report </h3>
     <table id="example" cellspacing="0" width="100%">
         <thead>
             <tr>
-                <th>Date</th>
-                <th>Due Date</th>
-                <th>Receipt #</th>
-                <th>Customer and Product detials</th>
-                <th>Qty.</th>
-                <th>Phone No.</th>
-                <th>Status</th>
+                
+                <th style="border: .5px solid black; width: 12%;">Date</th>
+                <th style="border: .5px solid black; width: 12%;">Due Date</th>
+                <th style="border: .5px solid black; width: 8%;">Receipt #</th>
+                <th style="border: .5px solid black; width: 20%;">Customer and Product detials</th>
+                <th style="border: .5px solid black; width: 3%;">Qty.</th>
+                <th style="border: .5px solid black; width: 10%;">Phone No.</th>
+                <th style="border: .5px solid black; width: 10%;">Status</th>
 
-                <th>Recieveables</th>
+                <th style="border: .5px solid black; width: 13%;">Invoice Value</th>
             </tr>
         </thead>
         <tfoot>
             <tr>
-                <th>Date</th>
-                <th>Due Date</th>
-                <th>Receipt #</th>
-                <th>Customer and Product detials</th>
-                <th>Qty.</th>
-                <th>Phone No.</th>
-                <th>Status</th>
+                
+                <th style="border: .5px solid black; width: 12%;">Date</th>
+                <th style="border: .5px solid black; width: 12%;">Due Date</th>
+                <th style="border: .5px solid black; width: 8%;">Receipt #</th>
+                <th style="border: .5px solid black; width: 20%;">Customer and Product detials</th>
+                <th style="border: .5px solid black; width: 3%;">Qty.</th>
+                <th style="border: .5px solid black; width: 10%;">Phone No.</th>
+                <th style="border: .5px solid black; width: 10%;">Status</th>
 
-                <th>Recieveables</th>
+                <th style="border: .5px solid black; width: 13%;">Invoice Value</th>
             </tr>
         </tfoot>
         <tbody>
             @foreach (Dictionary<string, object> salesObj in SalesOrders)
-            {
-                <tr>
-                    <td>@salesObj.First(x => x.Key.Equals("SalesOrderCreationDate")).Value.ToString()</td>
-                    <td>@salesObj.First(x => x.Key.Equals("SalesOrderLastUpdatedDate")).Value.ToString()</td>
-                    <td>@salesObj.First(x => x.Key.Equals("SalesOrderNo")).Value.ToString()</td>
+            { 
+                <tr style="background-color: #d89c6e">
+                    
+                    <td class="text-center" style="border: .5px solid black; background-color: #d89c6e;">@salesObj.First(x => x.Key.Equals("SalesOrderCreationDate")).Value.ToString()</td>
+                    <td class="text-center" style="border:.5px solid black ">@salesObj.First(x => x.Key.Equals("SalesOrderLastUpdatedDate")).Value.ToString()</td>
+                    <td class="text-center" style="border:.5px solid black ">@salesObj.First(x => x.Key.Equals("SalesOrderNo")).Value.ToString()</td>
                     @foreach (Dictionary<string, object> client in SupplierClients)
                     {
                         if (salesObj.First(x => x.Key.Equals("SalesOrderClientID")).Value.ToString().Equals(client.First(x => x.Key.Equals("SupplierClientID")).Value.ToString()))
                         {
-                            <td>@client.First(x => x.Key.Equals("SupplierClientName")).Value.ToString()</td>
-                            <td>@client.First(x => x.Key.Equals("SupplierClientPhone1")).Value.ToString()</td>
+                            <td class="text-left" style="border:.5px solid black ">@client.First(x => x.Key.Equals("SupplierClientName")).Value.ToString()</td>
+                          <td class="text-center" style="border:.5px solid black ">@salesObj.First(x => x.Key.Equals("SalesOrderTotalQuantity")).Value.ToString()</td>
+                            <td class="text-center" style="border:.5px solid black ">@client.First(x => x.Key.Equals("SupplierClientPhone1")).Value.ToString()</td>
                         }
 
                     }
 
 
-                    <td>@salesObj.First(x => x.Key.Equals("SalesOrderTotalQuantity")).Value.ToString()</td>
-                    <td>@salesObj.First(x => x.Key.Equals("SalesOrderStatus")).Value.ToString()</td>
-                    <td>@salesObj.First(x => x.Key.Equals("SalesOrderAmountGrandTotal")).Value.ToString()</td>
+                  
+                    <td class="text-center" style="border:.5px solid black ">@salesObj.First(x => x.Key.Equals("SalesOrderStatus")).Value.ToString()</td>
+                    <td class="text-center" style="border:.5px solid black ">@salesObj.First(x => x.Key.Equals("SalesOrderAmountGrandTotal")).Value.ToString()</td>
+
+                </tr>
+
+                foreach (Dictionary<string, object> purchase in PurchaseOrders)
+                {
+
+                    if (salesObj.First(x => x.Key.Equals("SalesOrderReferenceNo")).Value.ToString().Equals(purchase.First(x => x.Key.Equals("PurchaseOrderReferenceNo")).Value.ToString()))
+                    {
+
+                        object[] obs = (object[])purchase.First(x => x.Key.Equals("PurchaseOrderDetails")).Value;
+
+                        foreach (Dictionary<string, object> products in obs)
+                        {
+                            <tr >
+                                
+                                <td class="text-center" style="border: .5px solid black; background-color: #f2f4f7;"><div hidden>@salesObj.First(x => x.Key.Equals("SalesOrderCreationDate")).Value.ToString()</div></td>
+                                <td class="text-center" style="border: .5px solid black; background-color: #f2f4f7;">PO-@purchase.First(x => x.Key.Equals("PurchaseOrderNo")).Value.ToString()</td>
+                                <td class="text-center" style="border:.5px solid black ">@products.First(x => x.Key.Equals("PurchaseOrderRowProductSKU")).Value.ToString()</td>
+                                <td class="text-left" style="border:.5px solid black ">@products.First(x => x.Key.Equals("PurchaseOrderRowProductDescription")).Value.ToString()</td>
+                                @try
+                                {
+                                    <td class="text-center" style="border:.5px solid black ">@products.First(x => x.Key.Equals("PurchaseOrderRowQuantity")).Value.ToString().Split('.')[0]</td>
+                                }
+                                catch (Exception e) { 
+                                <td class="text-center" style="border:.5px solid black ">@products.First(x => x.Key.Equals("PurchaseOrderRowQuantity")).Value.ToString()</td>
+                                }
+                                
+                                <td class="text-center" style="border:.5px solid black ">-</td>
+                                <td class="text-center" style="border:.5px solid black " ><div hidden>@salesObj.First(x => x.Key.Equals("SalesOrderStatus")).Value.ToString()</div></td>
+                                <!-- <td class="text-center" style="border:.5px solid black ">purchase.First(x => x.Key.Equals("PurchaseOrderStatus")).Value.ToString()</td>-->
+                                <td class="text-center" style="border:.5px solid black ">-</td>
+                            </tr>
+                        }
+                    }
+
+                }
+                foreach (Dictionary<string, object> purchase in WorkOrders)
+                { 
+                    if (salesObj.First(x => x.Key.Equals("SalesOrderReferenceNo")).Value.ToString().Equals(purchase.First(x => x.Key.Equals("WorkOrderComments")).Value.ToString()))
+                    {    
+
+                        <tr style="background-color:#6ecca4">
+                            @foreach(Dictionary<string,object> product in Products)
+                            {
+                                if(product.First(x=>x.Key.Equals("ProductSKU")).Value.ToString().Equals(purchase.First(p=>p.Key.Equals("WorkOrderFinishedGoodSKU")).Value.ToString()))
+                                {
+                                  <td class="text-center" style="border: .5px solid black; background-color: #6ecca4;"><div hidden>@salesObj.First(x => x.Key.Equals("SalesOrderCreationDate")).Value.ToString()</div></td>
+                                  <td class="text-center" style="border:.5px solid black ">WO-@purchase.First(x => x.Key.Equals("WorkOrderNo")).Value.ToString()</td> 
+                                 <td class="text-center" style="border:.5px solid black ">@purchase.First(x => x.Key.Equals("WorkOrderFinishedGoodSKU")).Value.ToString()</td>
+                                 <td class="text-left" style="border:.5px solid black ">@product.First(x => x.Key.Equals("ProductDescription")).Value.ToString()</td>
+                                <td class="text-center" style="border:.5px solid black ">@purchase.First(x => x.Key.Equals("WorkOrderOrderedQuantity")).Value.ToString()</td>
+                                 <td class="text-center" style="border:.5px solid black ">-</td>
+                                <td class="text-center" style="border: .5px solid black; background-color: #6ecca4" ><div hidden>@salesObj.First(x => x.Key.Equals("SalesOrderStatus")).Value.ToString()</div></td>
+                               // <td class="text-center" style="border:.5px solid black ">@purchase.First(x => x.Key.Equals("WorkOrderStatus")).Value.ToString()</td>
+                                <td class="text-center" style="border:.5px solid black ">-</td>
+                                }
+                                
+                            }
+
+                        </tr>
+                         
+                    }
+                }
+            }
+
+
+
+            <!--Other example -->
+
+
+
+            @foreach (Dictionary<string, object> salesObj in SalesOrders)
+            {
+                <tr style="background-color: #d89c6e">
+
+                    <td class="text-center" style="border: .5px solid black; background-color: #d89c6e;"><div >09-Sep-17 2:23:41 PM</div></td>
+                    <td class="text-center" style="border:.5px solid black ">@salesObj.First(x => x.Key.Equals("SalesOrderLastUpdatedDate")).Value.ToString()</td>
+                    <td class="text-center" style="border:.5px solid black ">@salesObj.First(x => x.Key.Equals("SalesOrderNo")).Value.ToString()</td>
+                    @foreach (Dictionary<string, object> client in SupplierClients)
+                    {
+                        if (salesObj.First(x => x.Key.Equals("SalesOrderClientID")).Value.ToString().Equals(client.First(x => x.Key.Equals("SupplierClientID")).Value.ToString()))
+                        {
+                            <td class="text-left" style="border:.5px solid black ">@client.First(x => x.Key.Equals("SupplierClientName")).Value.ToString()</td>
+                            <td class="text-center" style="border:.5px solid black ">@salesObj.First(x => x.Key.Equals("SalesOrderTotalQuantity")).Value.ToString()</td>
+                            <td class="text-center" style="border:.5px solid black ">@client.First(x => x.Key.Equals("SupplierClientPhone1")).Value.ToString()</td>
+                        }
+
+                    }
+
+
+
+                    <td class="text-center" style="border: .5px solid black; "><div hidden>Completed</div></td>
+                    <td class="text-center" style="border:.5px solid black ">@salesObj.First(x => x.Key.Equals("SalesOrderAmountGrandTotal")).Value.ToString()</td>
 
                 </tr>
 
@@ -76,14 +189,24 @@
                         foreach (Dictionary<string, object> products in obs)
                         {
                             <tr>
-                                <td>-</td>
-                                <td>PO-@purchase.First(x => x.Key.Equals("PurchaseOrderNo")).Value.ToString()</td>
-                                <td>@products.First(x => x.Key.Equals("PurchaseOrderRowProductSKU")).Value.ToString()</td>
-                                <td>@products.First(x => x.Key.Equals("PurchaseOrderRowProductDescription")).Value.ToString()</td>
-                                <td>@products.First(x => x.Key.Equals("PurchaseOrderRowQuantity")).Value.ToString()</td>
-                                <td>-</td>
-                                <td>-</td>
-                                <td>-</td>
+
+                                <td class="text-center" style="border: .5px solid black; "><div hidden>Sep</div></td>
+                                <td class="text-center" style="border: .5px solid black; background-color: #f2f4f7;">PO-@purchase.First(x => x.Key.Equals("PurchaseOrderNo")).Value.ToString()</td>
+                                <td class="text-center" style="border:.5px solid black ">@products.First(x => x.Key.Equals("PurchaseOrderRowProductSKU")).Value.ToString()</td>
+                                <td class="text-left" style="border:.5px solid black ">@products.First(x => x.Key.Equals("PurchaseOrderRowProductDescription")).Value.ToString()</td>
+                                @try
+                                {
+                                    <td class="text-center" style="border:.5px solid black ">@products.First(x => x.Key.Equals("PurchaseOrderRowQuantity")).Value.ToString().Split('.')[0]</td>
+                                }
+                                catch (Exception e)
+                                {
+                                    <td class="text-center" style="border:.5px solid black ">@products.First(x => x.Key.Equals("PurchaseOrderRowQuantity")).Value.ToString()</td>
+                                }
+
+                                <td class="text-center" style="border:.5px solid black ">-</td>
+                                <td class="text-center" style="border: .5px solid black; "><div hidden>Completed</div></td>
+                                <!-- <td class="text-center" style="border:.5px solid black ">purchase.First(x => x.Key.Equals("PurchaseOrderStatus")).Value.ToString()</td>-->
+                                <td class="text-center" style="border:.5px solid black ">-</td>
                             </tr>
                         }
                     }
@@ -91,44 +214,51 @@
                 }
                 foreach (Dictionary<string, object> purchase in WorkOrders)
                 {
-
                     if (salesObj.First(x => x.Key.Equals("SalesOrderReferenceNo")).Value.ToString().Equals(purchase.First(x => x.Key.Equals("WorkOrderComments")).Value.ToString()))
                     {
 
-                        object[] obs = (object[])purchase.First(x => x.Key.Equals("WorkOrderDetails")).Value;
+                        <tr style="background-color:#6ecca4">
+                            @foreach (Dictionary<string, object> product in Products)
+                            {
+                                if (product.First(x => x.Key.Equals("ProductSKU")).Value.ToString().Equals(purchase.First(p => p.Key.Equals("WorkOrderFinishedGoodSKU")).Value.ToString()))
+                                {
+                                    <td class="text-center" style="border: .5px solid black; background-color: #6ecca4;"><div hidden>Sep</div></td>
+                                    <td class="text-center" style="border:.5px solid black ">WO-@purchase.First(x => x.Key.Equals("WorkOrderNo")).Value.ToString()</td>
+                                    <td class="text-center" style="border:.5px solid black ">@purchase.First(x => x.Key.Equals("WorkOrderFinishedGoodSKU")).Value.ToString()</td>
+                                    <td class="text-left" style="border:.5px solid black ">@product.First(x => x.Key.Equals("ProductDescription")).Value.ToString()</td>
+                                    <td class="text-center" style="border:.5px solid black ">@purchase.First(x => x.Key.Equals("WorkOrderOrderedQuantity")).Value.ToString()</td>
+                                    <td class="text-center" style="border:.5px solid black ">-</td>
+                                    <td class="text-center" style="border: .5px solid black; background-color: #6ecca4"><div hidden>Completed</div></td>
+                                    // <td class="text-center" style="border:.5px solid black ">@purchase.First(x => x.Key.Equals("WorkOrderStatus")).Value.ToString()</td>
+                                    <td class="text-center" style="border:.5px solid black ">-</td>
+                                }
 
-                        foreach (Dictionary<string, object> products in obs)
-                        {
-                            <tr>
-                                <td>-</td>
-                                <td>WO-@purchase.First(x => x.Key.Equals("WorkOrderNo")).Value.ToString()</td>
-                                <td>@products.First(x => x.Key.Equals("WorkOrderBOMRowProductSKU")).Value.ToString()</td>
-                                <td>@products.First(x => x.Key.Equals("WorkOrderBOMRowProductDescription")).Value.ToString()</td>
-                                <td>@products.First(x => x.Key.Equals("WorkOrderBOMRowOrderedQuantity")).Value.ToString()</td>
-                                <td>-</td>
-                                <td>-</td>
-                                <td>-</td>
-                            </tr>
-                        }
+                            }
+
+                        </tr>
+
                     }
-
                 }
-
-
             }
 
 
+
         </tbody>
+
+
+
     </table>
 
 
     <script type="text/javascript" charset="utf8" src="../../Content/jquery-1.8.2.min.js"></script>
-    <script type="text/javascript" charset="utf8" src="../../Content/jquery.dataTables.min.js"></script>
+    <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.15/js/jquery.dataTables.min.js"></script>
     <script>
 
-        //$(function () {
-        //    $("#example").dataTable();
-        //})
+        $(function () {
+            $("#example").dataTable();
+           
+        })
+       
     </script>
 </body>
 </html>
