@@ -14,11 +14,19 @@
 
     <script src="https://printjs-4de6.kxcdn.com/print.min.js"></script>
     <script>
-        function call_download()
-        {
-            alert("here we go.");
-            printJS('docs/PrintJS.pdf');
-        }
+        var doc = new jsPDF();
+        var specialElementHandlers = {
+            '#editor': function (element, renderer) {
+                return true;
+            }
+        };
+        $('#submit').click(function () {
+            doc.fromHTML($('#content').html(), 15, 15, {
+                'width': 190,
+                'elementHandlers': specialElementHandlers
+            });
+            doc.save('sample-page.pdf');
+        });
     </script>
     
     
@@ -49,23 +57,26 @@
 </head>
 
 <body>
+ 
+   
+    <div id="content">
+        <h3 style="margin-top:10%" class="col-lg-5 col-lg-offset-5 col-md-5 col-md-offset-5 col-sm-5 col-sm-offset-5 form-signin-heading">Please enter your APIKEY.</h3>
+        <div class="col-lg-3 col-lg-offset-5 col-md-3 col-md-offset-5 col-sm-3 col-sm-offset-5">
 
-    <input type="button" value="submit" onclick="call_download()" />
-
-    <h3 style="margin-top:10%" class="col-lg-5 col-lg-offset-5 col-md-5 col-md-offset-5 col-sm-5 col-sm-offset-5 form-signin-heading">Please enter your APIKEY.</h3>
-    <div class="col-lg-3 col-lg-offset-5 col-md-3 col-md-offset-5 col-sm-3 col-sm-offset-5">
-
-        <form class="form-signin" action="../../Home/report">
+            <form class="form-signin" action="../../Home/report">
 
 
 
-            <label for="inputPassword" class="sr-only">Password</label>
-            <input type="password" id="inputPassword" name="APIKEY" class="form-control" placeholder="API-KEY" required autofocus>
+                <label for="inputPassword" class="sr-only">Password</label>
+                <input type="password" id="inputPassword" name="APIKEY" class="form-control" placeholder="API-KEY" required autofocus>
 
-            <button style="margin-top:20px" class="btn btn-lg btn-primary btn-block" type="submit">Submit</button>
-        </form>
+                <button style="margin-top:20px" class="btn btn-lg btn-primary btn-block" type="submit">Submit</button>
+            </form>
 
-    </div> <!-- /container -->
+        </div> <!-- /container -->
+     
+        </div>
+
     
 </body>
 </html>
