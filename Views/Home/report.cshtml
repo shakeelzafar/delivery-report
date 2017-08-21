@@ -163,12 +163,8 @@
                         {
                             bool POstatus = true;
                             
-                            string dateOfCreation = "";
-                            DateTime d = Convert.ToDateTime(salesObj.First(x => x.Key.Equals("SalesOrderCreationDate")).Value.ToString());
-                           System.Web.UI.WebControls.TreeNode tn = new System.Web.UI.WebControls.TreeNode(d.ToString("dd-MMM-yyyy"));
-                            dateOfCreation= tn.Value.ToString();
                            <tr>
-                            <td class="text-center" style="border: .5px solid black; background-color: #f2f4f7;"><div hidden>@dateOfCreation</div></td>
+                            <td class="text-center" style="border: .5px solid black; background-color: #f2f4f7;"><div hidden>@salesObj.First(x => x.Key.Equals("SalesOrderCreationDate")).Value.ToString()</div></td>
                             @foreach (Dictionary<string, object> purchase in PurchaseOrders)
                             {
 
