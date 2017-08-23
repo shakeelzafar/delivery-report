@@ -5,7 +5,7 @@
     List<Dictionary<string, object>> WorkOrders = (List<Dictionary<string, object>>)Session["WorkOrders"];
     //List<Dictionary<string, object>> Products = (List<Dictionary<string, object>>)Session["Products"];
     List<Dictionary<string, object>> SupplierClients = (List<Dictionary<string, object>>)Session["SupplierClients"];
-    
+    int srNo = 0;
 }
 <html>
 <head>
@@ -85,7 +85,7 @@
     <table id="example" cellspacing="0" width="100%">
         <thead>
             <tr>
-                
+                <th style="border: .5px solid black; width: 3%;">Sr#</th>
                 <th style="border: .5px solid black; width: 12%;">Date</th>
                 <th style="border: .5px solid black; width: 12%;">Due Date</th>
                 <th style="border: .5px solid black; width: 8%;">Receipt #</th>
@@ -99,7 +99,7 @@
         </thead>
         <tfoot>
             <tr>
-                
+                <th style="border: .5px solid black; width: 3%;">Sr#</th>
                 <th style="border: .5px solid black; width: 12%;">Date</th>
                 <th style="border: .5px solid black; width: 12%;">Due Date</th>
                 <th style="border: .5px solid black; width: 8%;">Receipt #</th>
@@ -116,12 +116,24 @@
             { 
                 string status = salesObj.First(x => x.Key.Equals("SalesOrderStatus")).Value.ToString();
                 if(!status.Equals("Cancelled"))
-                { 
-                   
+                {
+                    String[] Months = { "January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December" };
+                    string iString = salesObj.First(x => x.Key.Equals("SalesOrderCreationDate")).Value.ToString();
+                    DateTime d = Convert.ToDateTime(iString);
+                    String day = d.Day.ToString().Length < 2 ? "0" + d.Day.ToString() : d.Day.ToString();
+                    String actualDate = day + "-" + Months[int.Parse(d.Month.ToString())-1] + "-" + d.Year.ToString();
+
+                     iString = salesObj.First(x => x.Key.Equals("SalesOrderCustomOrderDate1")).Value.ToString();
+                    d = Convert.ToDateTime(iString);
+                    day = d.Day.ToString().Length < 2 ? "0" + d.Day.ToString() : d.Day.ToString();
+                    String actualDate2 = day + "-" + Months[int.Parse(d.Month.ToString())-1] + "-" + d.Year.ToString();
+                    srNo++;
                     <tr style="background-color: #d89c6e">
                     
-                        <td class="text-center" style="border: .5px solid black; background-color: #d89c6e;">@salesObj.First(x => x.Key.Equals("SalesOrderCreationDate")).Value.ToString()</td>
-                        <td class="text-center" style="border:.5px solid black ">@salesObj.First(x => x.Key.Equals("SalesOrderLastUpdatedDate")).Value.ToString()</td>
+                        <td class="text-center" style="border: .5px solid black; background-color: #f2f4f7;">@srNo</td>
+                        <td class="text-center" style="border: .5px solid black; background-color: #d89c6e;">@actualDate</td>
+                      
+                        <td class="text-center" style="border:.5px solid black ">@actualDate2</td>
                         <td class="text-center" style="border:.5px solid black ">@salesObj.First(x => x.Key.Equals("SalesOrderNo")).Value.ToString()</td>
                         @foreach (Dictionary<string, object> client in SupplierClients)
                         {
@@ -148,7 +160,7 @@
                             
                     foreach (Dictionary<string, object> pros in obs)
                     {
-                        string[] skus = { "complaint detail", "x1", "rm153", "f0001", "c0128", "d0001" };
+                        string[] skus = { "complaint detail", "x1", "rm153", "f0001", "c0128", "d0001", "ser101", "ser102", "ser103", "ser104" };
                         string SKU = pros.First(pp => pp.Key.Equals("SalesOrderRowProductSKU")).Value.ToString();
                         bool skuExist = true;
                         foreach(string str in skus)
@@ -162,9 +174,10 @@
                         if(skuExist)
                         {
                             bool POstatus = true;
-                            
+                            srNo++;
                            <tr>
-                            <td class="text-center" style="border: .5px solid black; background-color: #f2f4f7;"><div hidden>@salesObj.First(x => x.Key.Equals("SalesOrderCreationDate")).Value.ToString()</div></td>
+                               <td class="text-center" style="border: .5px solid black; background-color: #f2f4f7; ">@srNo</td>
+                            <td class="text-center" style="border: .5px solid black; background-color: #f2f4f7;"><div hidden>@actualDate</div></td>
                             @foreach (Dictionary<string, object> purchase in PurchaseOrders)
                             {
 
