@@ -133,6 +133,9 @@
                        if(actualDate2.Equals("01-January-2001"))
                        {
                            actualDate2 = "";
+                       }if(d.Year.ToString().Equals("0001") || d.Year.ToString().Equals("1"))
+                       {
+                           actualDate2 = "";
                        }
                     }
                     else { actualDate2 = ""; }
