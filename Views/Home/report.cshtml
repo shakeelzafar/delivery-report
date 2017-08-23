@@ -121,13 +121,21 @@
                     string iString = salesObj.First(x => x.Key.Equals("SalesOrderCreationDate")).Value.ToString();
                     DateTime d = Convert.ToDateTime(iString);
                     String day = d.Day.ToString().Length < 2 ? "0" + d.Day.ToString() : d.Day.ToString();
-                    String actualDate = day + "-" + Months[int.Parse(d.Month.ToString())-1] + "-" + d.Year.ToString();
-
-                     iString = salesObj.First(x => x.Key.Equals("SalesOrderCustomOrderDate1")).Value.ToString();
-                    d = Convert.ToDateTime(iString);
-                    day = d.Day.ToString().Length < 2 ? "0" + d.Day.ToString() : d.Day.ToString();
-                    String actualDate2 = day + "-" + Months[int.Parse(d.Month.ToString())-1] + "-" + d.Year.ToString();
+                    String actualDate = day + "-" + Months[int.Parse(d.Month.ToString()) - 1] + "-" + d.Year.ToString();
                     srNo++;
+                    String actualDate2="";
+                    iString = salesObj.First(x => x.Key.Equals("SalesOrderCustomOrderDate1")).Value.ToString();
+                    if (!iString.Contains("0001-01-01"))
+                    {
+                        d = Convert.ToDateTime(iString);
+                        day = d.Day.ToString().Length < 2 ? "0" + d.Day.ToString() : d.Day.ToString();
+                        actualDate2 = day + "-" + Months[int.Parse(d.Month.ToString()) - 1] + "-" + d.Year.ToString();
+                       if(actualDate2.Equals("01-January-2001"))
+                       {
+                           actualDate2 = "";
+                       }
+                    }
+                    else { actualDate2 = ""; }
                     <tr style="background-color: #d89c6e">
                     
                         <td class="text-center" style="border: .5px solid black; background-color: #f2f4f7;">@srNo</td>
