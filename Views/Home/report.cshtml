@@ -94,6 +94,7 @@
                 <th style="border: .5px solid black; width: 3%;">Qty.</th>
                 <th style="border: .5px solid black; width: 10%;">Phone No.</th>
                 <th style="border: .5px solid black; width: 10%;">Status</th>
+                <th style="border: .5px solid black; width: 10%;">Special Instructions</th>
                 <th style="border: .5px solid black; width: 8%;">Balance Amount</th>
                 <th style="border: .5px solid black; width: 8%;">Recived Amount</th>
                 <th style="border: .5px solid black; width: 8%;">Invoice Value</th>
@@ -161,9 +162,10 @@
 
                   
                         <td class="text-center" style="border:.5px solid black ">@salesObj.First(x => x.Key.Equals("SalesOrderStatus")).Value.ToString()</td>
-                        <td class="text-center" style="border:.5px solid black ">@balanceAmount</td>
-                        <td class="text-center" style="border:.5px solid black ">@receivedAmount</td>
-                        <td class="text-center" style="border:.5px solid black ">@salesObj.First(x => x.Key.Equals("SalesOrderAmountGrandTotal")).Value.ToString()</td>
+                        <td class="text-center" style="border:.5px solid black ">-</td>
+                        <td class="text-center" style="border:.5px solid black "> @Convert.ToDecimal(balanceAmount).ToString("#,##0.00")</td>
+                        <td class="text-center" style="border:.5px solid black ">@Convert.ToDecimal(receivedAmount).ToString("#,##0.00")</td>
+                        <td class="text-center" style="border:.5px solid black ">@Convert.ToDecimal(grandTotal).ToString("#,##0.00")</td>
 
                     </tr>
 
@@ -171,7 +173,7 @@
                     object[] obs = (object[])salesObj.First(x => x.Key.Equals("SalesOrderDetails")).Value;
                             
                     List<Dictionary<string, object>> OldWorkOrders = new List<Dictionary<string,object>>();
-                            
+                            //SalesOrderRowRemarks
                     foreach (Dictionary<string, object> pros in obs)
                     {
                         string[] skus = { "complaint detail", "x1", "rm153", "f0001", "c0128", "d0001", "ser101", "ser102", "ser103", "ser104" };
@@ -225,6 +227,7 @@
                                         <td class="text-center" style="border:.5px solid black ">-</td>
                                         <td class="text-center" style="border:.5px solid black "><div hidden>@salesObj.First(x => x.Key.Equals("SalesOrderStatus")).Value.ToString()</div></td>
                                             <!-- <td class="text-center" style="border:.5px solid black ">purchase.First(x => x.Key.Equals("PurchaseOrderStatus")).Value.ToString()</td>-->
+                                        <td class="text-center" style="border:.5px solid black ">@pros.First(x => x.Key.Equals("SalesOrderRowRemarks")).Value.ToString()</td>
                                         <td class="text-center" style="border:.5px solid black ">-</td>
                                         <td class="text-center" style="border:.5px solid black ">-</td>
                                         <td class="text-center" style="border:.5px solid black ">-</td>
@@ -271,6 +274,7 @@
                                                     <td class="text-center" style="border:.5px solid black ">-</td>
                                                     <td class="text-center" style="border:.5px solid black "><div hidden>@salesObj.First(x => x.Key.Equals("SalesOrderStatus")).Value.ToString()</div></td>
                                     <!-- <td class="text-center" style="border:.5px solid black ">purchase.First(x => x.Key.Equals("PurchaseOrderStatus")).Value.ToString()</td>-->
+                                <td class="text-center" style="border:.5px solid black ">@pros.First(x => x.Key.Equals("SalesOrderRowRemarks")).Value.ToString()</td>
                                                     <td class="text-center" style="border:.5px solid black ">-</td>
                                                     <td class="text-center" style="border:.5px solid black ">-</td>
                                                     <td class="text-center" style="border:.5px solid black ">-</td>
@@ -298,6 +302,7 @@
                                                 <td class="text-center" style="border:.5px solid black ">-</td>
                                                 <td class="text-center" style="border:.5px solid black "><div hidden>@salesObj.First(x => x.Key.Equals("SalesOrderStatus")).Value.ToString()</div></td>
                                 <!-- <td class="text-center" style="border:.5px solid black ">purchase.First(x => x.Key.Equals("PurchaseOrderStatus")).Value.ToString()</td>-->
+                                <td class="text-center" style="border:.5px solid black ">@pros.First(x => x.Key.Equals("SalesOrderRowRemarks")).Value.ToString()</td>
                                                 <td class="text-center" style="border:.5px solid black ">-</td>
                                                 <td class="text-center" style="border:.5px solid black ">-</td>
                                                 <td class="text-center" style="border:.5px solid black ">-</td>
@@ -323,6 +328,7 @@
                 <th style="border: .5px solid black; width: 3%;">Qty.</th>
                 <th style="border: .5px solid black; width: 10%;">Phone No.</th>
                 <th style="border: .5px solid black; width: 10%;">Status</th>
+                <th style="border: .5px solid black; width: 10%;">Special Instructions</th>
                 <th style="border: .5px solid black; width: 8%;">Balance Amount</th>
                 <th style="border: .5px solid black; width: 8%;">Recived Amount</th>
                 <th style="border: .5px solid black; width: 8%;">Invoice Value</th>
