@@ -199,7 +199,10 @@
                             <td class="text-center" style="border: .5px solid black; background-color: #f2f4f7;"><div hidden>@actualDate</div></td>
                             @foreach (Dictionary<string, object> purchase in PurchaseOrders)
                             {
-
+                                if (!POstatus)
+                                {
+                                    break;
+                                }
                                 if (salesObj.First(x => x.Key.Equals("SalesOrderNo")).Value.ToString().Equals(purchase.First(x => x.Key.Equals("PurchaseOrderComments")).Value.ToString()))
                                 {
 
@@ -208,6 +211,10 @@
 
                                     foreach (Dictionary<string, object> products in obs2)
                                     {
+                                        if (!POstatus)
+                                        {
+                                            break;
+                                        }
 
                                         if (pros.First(pp => pp.Key.Equals("SalesOrderRowProductSKU")).Value.ToString().Equals(products.First(pppp => pppp.Key.Equals("PurchaseOrderRowProductSKU")).Value.ToString()))
                                         {
