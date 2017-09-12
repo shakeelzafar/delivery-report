@@ -91,10 +91,11 @@
                 <th style="border: .5px solid black; width: 12%;">Due Date</th>
                 <th style="border: .5px solid black; width: 8%;">Receipt #</th>
                 <th style="border: .5px solid black; width: 18%;">Customer and Product detials</th>
+                <th style="border: .5px solid black; width: 10%;">Special Instructions</th>
                 <th style="border: .5px solid black; width: 3%;">Qty.</th>
                 <th style="border: .5px solid black; width: 10%;">Phone No.</th>
                 <th style="border: .5px solid black; width: 10%;">Status</th>
-                <th style="border: .5px solid black; width: 10%;">Special Instructions</th>
+                
                 <th style="border: .5px solid black; width: 8%;">Balance Amount</th>
                 <th style="border: .5px solid black; width: 8%;">Recived Amount</th>
                 <th style="border: .5px solid black; width: 8%;">Invoice Value</th>
@@ -118,7 +119,8 @@
                     {
                         balanceAmount = grandTotal;
                     }
-                    
+                    string saleObjectNo = salesObj.First(x => x.Key.Equals("SalesOrderNo")).Value.ToString();
+                    bool exists = false;
                     String[] Months = { "January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December" };
                     string iString = salesObj.First(x => x.Key.Equals("SalesOrderCreationDate")).Value.ToString();
                     DateTime d = Convert.ToDateTime(iString);
@@ -153,6 +155,7 @@
                             if (salesObj.First(x => x.Key.Equals("SalesOrderClientID")).Value.ToString().Equals(client.First(x => x.Key.Equals("SupplierClientID")).Value.ToString()))
                             {
                                 <td class="text-left" style="border:.5px solid black ">@client.First(x => x.Key.Equals("SupplierClientName")).Value.ToString()</td>
+                            <td class="text-center" style="border:.5px solid black ">-</td>
                                 <td class="text-center" style="border:.5px solid black ">@salesObj.First(x => x.Key.Equals("SalesOrderTotalQuantity")).Value.ToString()</td>
                                 <td class="text-center" style="border:.5px solid black ">@client.First(x => x.Key.Equals("SupplierClientPhone1")).Value.ToString()</td>
                             }
@@ -162,7 +165,7 @@
 
                   
                         <td class="text-center" style="border:.5px solid black ">@salesObj.First(x => x.Key.Equals("SalesOrderStatus")).Value.ToString()</td>
-                        <td class="text-center" style="border:.5px solid black ">-</td>
+                        
                         <td class="text-center" style="border:.5px solid black "> @Convert.ToDecimal(balanceAmount).ToString("#,##0.00")</td>
                         <td class="text-center" style="border:.5px solid black ">@Convert.ToDecimal(receivedAmount).ToString("#,##0.00")</td>
                         <td class="text-center" style="border:.5px solid black ">@Convert.ToDecimal(grandTotal).ToString("#,##0.00")</td>
@@ -215,6 +218,7 @@
                                                
 
                                         <td class="text-left" style="border:.5px solid black ">@pros.First(x => x.Key.Equals("SalesOrderRowProductDescription")).Value.ToString()</td>
+                                 <td class="text-center" style="border:.5px solid black ">@pros.First(x => x.Key.Equals("SalesOrderRowRemarks")).Value.ToString()</td>
                                         try
                                         {
                                             <td class="text-center" style="border:.5px solid black ">@pros.First(x => x.Key.Equals("SalesOrderRowQuantity")).Value.ToString().Split('.')[0]</td>
@@ -227,13 +231,18 @@
                                         <td class="text-center" style="border:.5px solid black ">-</td>
                                         <td class="text-center" style="border:.5px solid black "><div hidden>@salesObj.First(x => x.Key.Equals("SalesOrderStatus")).Value.ToString()</div></td>
                                             <!-- <td class="text-center" style="border:.5px solid black ">purchase.First(x => x.Key.Equals("PurchaseOrderStatus")).Value.ToString()</td>-->
-                                        <td class="text-center" style="border:.5px solid black ">@pros.First(x => x.Key.Equals("SalesOrderRowRemarks")).Value.ToString()</td>
+                                       
                                         <td class="text-center" style="border:.5px solid black ">-</td>
                                         <td class="text-center" style="border:.5px solid black ">-</td>
                                         <td class="text-center" style="border:.5px solid black ">-</td>
                                             break;
                                         }
                                     }
+
+                                }
+                                if (!POstatus)
+                                {
+                                    break;
                                 }
 
                             }
@@ -262,6 +271,7 @@
                                                     <td class="text-center" style="border: .5px solid black; background-color: #f2f4f7;">WO-@purchase.First(x => x.Key.Equals("WorkOrderNo")).Value.ToString()</td>
                                                     <td class="text-center" style="border: .5px solid black; background-color: #f2f4f7;">@pros.First(pp => pp.Key.Equals("SalesOrderRowProductSKU")).Value.ToString()</td>
                                                     <td class="text-left" style="border:.5px solid black ">@pros.First(x => x.Key.Equals("SalesOrderRowProductDescription")).Value.ToString()</td>
+                                 <td class="text-center" style="border:.5px solid black ">@pros.First(x => x.Key.Equals("SalesOrderRowRemarks")).Value.ToString()</td>
                                                     try
                                                     {
                                                         <td class="text-center" style="border:.5px solid black ">@pros.First(x => x.Key.Equals("SalesOrderRowQuantity")).Value.ToString().Split('.')[0]</td>
@@ -274,7 +284,7 @@
                                                     <td class="text-center" style="border:.5px solid black ">-</td>
                                                     <td class="text-center" style="border:.5px solid black "><div hidden>@salesObj.First(x => x.Key.Equals("SalesOrderStatus")).Value.ToString()</div></td>
                                     <!-- <td class="text-center" style="border:.5px solid black ">purchase.First(x => x.Key.Equals("PurchaseOrderStatus")).Value.ToString()</td>-->
-                                <td class="text-center" style="border:.5px solid black ">@pros.First(x => x.Key.Equals("SalesOrderRowRemarks")).Value.ToString()</td>
+                                
                                                     <td class="text-center" style="border:.5px solid black ">-</td>
                                                     <td class="text-center" style="border:.5px solid black ">-</td>
                                                     <td class="text-center" style="border:.5px solid black ">-</td>
@@ -290,6 +300,7 @@
                                                     <td class="text-center" style="border: .5px solid black; background-color: #f2f4f7;">@pros.First(pp => pp.Key.Equals("SalesOrderRowProductSKU")).Value.ToString()</td>
                                                
                                                     <td class="text-left" style="border:.5px solid black ">@pros.First(x => x.Key.Equals("SalesOrderRowProductDescription")).Value.ToString()</td>
+                                <td class="text-center" style="border:.5px solid black ">@pros.First(x => x.Key.Equals("SalesOrderRowRemarks")).Value.ToString()</td>
                                                 try
                                                 {
                                                     <td class="text-center" style="border:.5px solid black ">@pros.First(x => x.Key.Equals("SalesOrderRowQuantity")).Value.ToString().Split('.')[0]</td>
@@ -302,7 +313,7 @@
                                                 <td class="text-center" style="border:.5px solid black ">-</td>
                                                 <td class="text-center" style="border:.5px solid black "><div hidden>@salesObj.First(x => x.Key.Equals("SalesOrderStatus")).Value.ToString()</div></td>
                                 <!-- <td class="text-center" style="border:.5px solid black ">purchase.First(x => x.Key.Equals("PurchaseOrderStatus")).Value.ToString()</td>-->
-                                <td class="text-center" style="border:.5px solid black ">@pros.First(x => x.Key.Equals("SalesOrderRowRemarks")).Value.ToString()</td>
+                                
                                                 <td class="text-center" style="border:.5px solid black ">-</td>
                                                 <td class="text-center" style="border:.5px solid black ">-</td>
                                                 <td class="text-center" style="border:.5px solid black ">-</td>
@@ -325,10 +336,11 @@
                 <th style="border: .5px solid black; width: 12%;">Due Date</th>
                 <th style="border: .5px solid black; width: 8%;">Receipt #</th>
                 <th style="border: .5px solid black; width: 18%;">Customer and Product detials</th>
+                <th style="border: .5px solid black; width: 10%;">Special Instructions</th>
                 <th style="border: .5px solid black; width: 3%;">Qty.</th>
                 <th style="border: .5px solid black; width: 10%;">Phone No.</th>
                 <th style="border: .5px solid black; width: 10%;">Status</th>
-                <th style="border: .5px solid black; width: 10%;">Special Instructions</th>
+
                 <th style="border: .5px solid black; width: 8%;">Balance Amount</th>
                 <th style="border: .5px solid black; width: 8%;">Recived Amount</th>
                 <th style="border: .5px solid black; width: 8%;">Invoice Value</th>
