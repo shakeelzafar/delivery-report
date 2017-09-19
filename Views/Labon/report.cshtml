@@ -14,6 +14,7 @@
         }
 
     }
+       int colorNumber = 0;
     int srNo = 0;
 }
 <html>
@@ -77,13 +78,15 @@
     <div id="content">
 
         <div>
-            <table style="width:100%;border-collapse:collapse; " width="100%">
+            <table style="width:100%;border-collapse:collapse; background-color:#ffffff; ">
                 <tbody>
-                    <tr><td rowspan="5" style="border:1px solid black;padding:5px; "><div style="width:90%"><img src="../../Content/logo20.png" /></div> </td><td colspan="2" rowspan="1" style="border: 1px solid black; padding: 5px; text-align: center;"><span style="font-size: 10pt;"><span style="font-size: 10pt;"><strong><a style="background-color: #f2f4f7; text-decoration-style: initial; text-decoration-color: initial;">Email: sales@profineworld.com,&nbsp;&nbsp;</a><a target="_blank" style="background-color: #f2f4f7; text-decoration-style: initial; text-decoration-color: initial;">www.profineworld.com</a></strong></span><span style="font-size: 10pt;">&nbsp;</span></span></td></tr>
-                    <tr><td class="text-center" style="border:1px solid black;padding:5px;width:30% "><div><p style="font-weight:bold;text-align:center"><span style="font-size: 12pt;">Display &amp; head office</span></p></div></td><td class="text-center" style="border:1px solid black;padding:5px;width:40%;"><div><p style="font-weight:bold;text-align:center"><span style="font-size: 12pt;">Gulberg Display</span></p></div></td></tr>
-                    <tr><td class="text-center" style="border:1px solid black;padding:5px"><div><p style="text-align:center"><span style="font-size: 12pt;"><span style="font-size: 12pt;"><span style="font-size: 12pt;">6 Mecleod Road, Lahore,Tel:042-37226257,Cell: 03244896776</span>  </span></span></p></div></td><td class="text-center" style="border:1px solid black;padding:5px"><div><p style="text-align:center"><span style="font-size: 12pt;">119-P M.M Alam road, Gulberg 2,Lahore, Tel:042-35778848, Cell: 0302-8427699</span></p></div></td></tr>
-
-                    <tr><td rowspan="2" colspan="2" style="border-bottom:1px solid black; border-right:1px solid black"><div><p style="font-weight:bold;text-align:center; margin-bottom:-3px; "><span style="font-size: 12pt;">Islamabad Dealership</span></p><p style="text-align:center;font-size: 12pt; ">Plaza #: 39, Main Golra Rd, Service Lane, Near Audi Center, Islamabad, Tel: 051 5495731</p></div></td></tr>
+                    <tr style="border:1px solid black;">
+                        <td rowspan="5" style="padding: 5px; border: 1px solid black; "><div style="width:90%"><img src="../../Content/labonlogo.jpg" /></div> </td>
+                    </tr>
+                    
+                    <tr><td rowspan="2" colspan="2" style="border:1px solid black; border:1px solid black">
+                        <div><p style="font-weight:bold;text-align:center; margin-bottom:-3px; "><span style="font-size: 12pt;">
+                            Sialkot Dealership</span></p><p style="text-align:center;font-size: 12pt; ">Soni Street, Market Road, Model Town, Sialkot, Pakistan.</p></div></td></tr>
                 </tbody>
             </table>
             <a style="margin-top:2%" class="button" href="javascript:exportTableToCSV('Delivery Report.csv')">Export This Table to Excell</a>
@@ -91,22 +94,23 @@
 
         </div><br />
 
-        <h3 style="font-weight:bold;text-align:center;padding-top:3px; padding-bottom:2px; border-bottom: 2px solid #000000; border-top: 2px solid #000000;margin-bottom:15px">Delivery Products Report </h3>
+        <h3 style="font-weight:bold;text-align:center;padding-top:3px; padding-bottom:2px; border-bottom: 2px solid #000000; border-top: 2px solid #000000;margin-bottom:15px">Labon Production Report </h3>
         <table id="example" cellspacing="0" width="100%">
             <thead>
                 <tr>
                     <th style="border: .5px solid black; width: 3%;">Sr#</th>
                     <th style="border: .5px solid black; width: 12%;">Date</th>
                     <th style="border: .5px solid black; width: 12%;">Sub Supplier Name</th>
-                    <th style="border: .5px solid black; width: 8%;">Type</th>
+                    <th style="border: .5px solid black; width: 10%;">Code</th>
+                    <th style="border: .5px solid black; width: 8%;">Description</th>                    
                     <th style="border: .5px solid black; width: 18%;">QNT Sent</th>
                     <th style="border: .5px solid black; width: 3%;">QNT Used</th>
-                    <th style="border: .5px solid black; width: 10%;">Code</th>
-                    <th style="border: .5px solid black; width: 10%;">Waste KNIT</th>
-                    <th style="border: .5px solid black; width: 8%;">Waste Wash</th>
+                    
+                    
+                    <th style="border: .5px solid black; width: 8%;">Waste</th>
                     <th style="border: .5px solid black; width: 8%;">Returned QNT</th>
                     <th style="border: .5px solid black; width: 8%;">Code</th>
-                    <th style="border: .5px solid black; width: 8%;">TYPE</th>
+                    <th style="border: .5px solid black; width: 8%;">Description</th>
                     <th style="border: .5px solid black; width: 8%;">QNT Fabric</th>
                     <th style="border: .5px solid black; width: 8%;">QNT Used + Wasted + Returned</th>
                 </tr>
@@ -115,6 +119,10 @@
             <tbody>
                 @foreach (Dictionary<string, object> salesObj in documents)
                 {
+
+
+                    string[] color = { "#93d5f2", "#add356" };
+                
                     string status = salesObj.First(x => x.Key.Equals("DocumentStatus")).Value.ToString();
                     if (!status.Equals("Cancelled"))
                     {
@@ -145,115 +153,219 @@
                         //   }
                         //}
                         //else { actualDate2 = ""; }
-                        <tr style="background-color: #d89c6e">
-
-                            <td class="text-center" style="border: .5px solid black; background-color: #f2f4f7;">@srNo</td>
-                            <td class="text-center" style="border: .5px solid black; background-color: #d89c6e;">@actualDate</td>
-                            <td class="text-center" style="border:.5px solid black ">@salesObj.First(x => x.Key.Equals("DocumentContactPerson")).Value.ToString()</td>
-                            @{
+                        
+                            
                         string dox = "Dox # " + salesObj.First(x => x.Key.Equals("DocumentNo")).Value.ToString();
                         List<Dictionary<string, object>> selecteddocuments = new List<Dictionary<string, object>>();
                         foreach (Dictionary<string, object> sobject in Documents)
                         {
+                               try { 
                             if (sobject.First(x => x.Key.Equals("DocumentTags")).Value.ToString().Equals(dox))
                             {
                                 selecteddocuments.Add(sobject);
                             }
+                            }catch(Exception e)
+                            {
+                                
+                            }
                         }
                         object[] obs2 = (object[])salesObj.First(x => x.Key.Equals("DocumentDetails")).Value;
-                        Dictionary<string, object> products = (Dictionary<string, object>)obs2[0];
-                        string ProductSKU = products.First(x => x.Key.Equals("DocumentRowProductSKU")).Value.ToString();
-                        string ProductDesciption = "";
-                        foreach (Dictionary<string, object> prod in Products)
+                        int countForLoop = obs2.Count();
+                       
+                        colorNumber++;
+                        for(int doc =0; doc<countForLoop; doc++)    
                         {
-                            if (prod.First(x => x.Key.Equals("ProductSKU")).Value.ToString().Equals(ProductSKU))
+                            
+                            
+                             Dictionary<string, object> products = (Dictionary<string, object>)obs2[doc];
+                            string ProductSKU = products.First(x => x.Key.Equals("DocumentRowProductSKU")).Value.ToString();
+                            string ProductDesciption = "";
+                            foreach (Dictionary<string, object> prod in Products)
                             {
-                                ProductDesciption = prod.First(x => x.Key.Equals("ProductDescription")).Value.ToString();
-                            }
-                        }
-
-                            }
-
-                            <td class="text-center" style="border:.5px solid black ">@ProductDesciption</td>
-                            <td class="text-center" style="border:.5px solid black ">@salesObj.First(x => x.Key.Equals("DocumentTotalQuantity")).Value.ToString()</td>
-                            @foreach (Dictionary<string, object> qused in selecteddocuments)
-                            {
-                                //DocumentParentDocId
-                                if (qused.First(x => x.Key.Equals("DocumentComments")).Value.ToString().ToLower().Contains("received") && qused.First(x => x.Key.Equals("DocumentParentDocId")).Value.ToString().Equals("0"))
+                                try { 
+                                if (prod.First(x => x.Key.Equals("ProductSKU")).Value.ToString().Equals(ProductSKU))
                                 {
-                                    <td class="text-center" style="border:.5px solid black ">@qused.First(x => x.Key.Equals("DocumentTotalQuantity")).Value.ToString()</td>
-                                    qntUsed = double.Parse(qused.First(x => x.Key.Equals("DocumentTotalQuantity")).Value.ToString());
-                                    break;
+                                    ProductDesciption = prod.First(x => x.Key.Equals("ProductDescription")).Value.ToString();
                                 }
-                            }
-
-                            <td class="text-center" style="border:.5px solid black ">@ProductSKU</td>
-
-                            @foreach (Dictionary<string, object> qused in selecteddocuments)
-                            {
-                                //DocumentParentDocId
-                                if (qused.First(x => x.Key.Equals("DocumentComments")).Value.ToString().ToLower().Contains("waste"))
+                                }catch(Exception e)
                                 {
-                                    qntWasteFound = false;
-                                    <td class="text-center" style="border:.5px solid black ">@qused.First(x => x.Key.Equals("DocumentTotalQuantity")).Value.ToString()</td>
-                                    qntWaste = double.Parse(qused.First(x => x.Key.Equals("DocumentTotalQuantity")).Value.ToString());
-                                    break;
+                                
                                 }
-                            }
-                            <td class="text-center" style="border:.5px solid black ">-</td>
-                            @if (qntWasteFound)
-                            {
-                                <td class="text-center" style="border:.5px solid black ">-</td>
+                            } 
+                            
+                            
+                            <tr style="background-color: @color[colorNumber%2]">
 
-                            }
-
-                            @foreach (Dictionary<string, object> qused in selecteddocuments)
-                            {
-                                //DocumentParentDocId
-                                qntWasteFound = true;
-                                if (qused.First(x => x.Key.Equals("DocumentComments")).Value.ToString().ToLower().Contains("return"))
-                                {
-                                    <td class="text-center" style="border:.5px solid black ">@qused.First(x => x.Key.Equals("DocumentTotalQuantity")).Value.ToString()</td>
-                                    qntReturned = double.Parse(qused.First(x => x.Key.Equals("DocumentTotalQuantity")).Value.ToString());
-                                    qntWasteFound = false;
-                                    break;
-                                }
-                            }
-                            @if (qntWasteFound)
-                            {
-                                <td class="text-center" style="border:.5px solid black ">-</td>
-                            }
-                            @foreach (Dictionary<string, object> qused in selecteddocuments)
-                            {
-                                //DocumentParentDocId
-                                if (qused.First(x => x.Key.Equals("DocumentComments")).Value.ToString().ToLower().Contains("received") && !qused.First(x => x.Key.Equals("DocumentParentDocId")).Value.ToString().Equals("0"))
-                                {
-                                    object[] obs3 = (object[])qused.First(x => x.Key.Equals("DocumentDetails")).Value;
-                                    Dictionary<string, object> products2 = (Dictionary<string, object>)obs3[0];
-                                    string ProductSKU2 = products2.First(x => x.Key.Equals("DocumentRowProductSKU")).Value.ToString();
-                                    string ProductDesciption2 = "";
-                                    foreach (Dictionary<string, object> prod2 in Products)
+                                    <td class="text-center" style="border: .5px solid black; background-color: #f2f4f7;">@srNo</td>
+                                    <td class="text-center" style="border: .5px solid black; background-color: #d89c6e;">@actualDate</td>
+                                    <td class="text-center" style="border:.5px solid black ">@salesObj.First(x => x.Key.Equals("DocumentContactPerson")).Value.ToString()</td>
+                                <td class="text-center" style="border:.5px solid black ">@ProductSKU</td>    
+                                <td class="text-center" style="border:.5px solid black ">@ProductDesciption</td>
+                                    <td class="text-center" style="border:.5px solid black ">@products.First(x => x.Key.Equals("DocumentRowQuantity")).Value.ToString()</td>
+                                    @foreach (Dictionary<string, object> qused in WorkOrders)
                                     {
-                                        if (prod2.First(x => x.Key.Equals("ProductSKU")).Value.ToString().Equals(ProductSKU2))
+                                        //DocumentParentDocId
+                                        if (qused.First(x => x.Key.Equals("WorkOrderTags")).Value.ToString().Equals(dox))
                                         {
-                                            ProductDesciption2 = prod2.First(x => x.Key.Equals("ProductDescription")).Value.ToString();
+                                            qntUsed = double.Parse(qused.First(x => x.Key.Equals("WorkOrderReceivedQuantity")).Value.ToString());
+                                            try
+                                            {
+                                                object[] obs3 = (object[])qused.First(x => x.Key.Equals("WorkOrderDetails")).Value;
+
+                                                Dictionary<string, object> WorkMaterial = new Dictionary<string, object>();
+                                                foreach (Dictionary<string, object> vvv in obs3)
+                                                {
+                                                    if (vvv.First(x => x.Key.Equals("WorkOrderBOMRowProductSKU")).Value.ToString().Equals(ProductSKU))
+                                                    {
+                                                        object[] obs4 = (object[])vvv.First(x => x.Key.Equals("WorkOrderRowAllocatedDetails")).Value;
+                                                        Dictionary<string, object> WorkedMaterial = (Dictionary<string, object>)obs4[0];
+                                                       <td class="text-center" style="border:.5px solid black ">@WorkedMaterial.First(x => x.Key.Equals("WorkOrderBOMRowAllocatedQuantity")).Value.ToString()</td>
+                                                    }
+                                                }
+
+                                              
+                                                break;
+                                            }
+                                            catch (Exception e) 
+                                            {
+                                                continue;
+                                            }
                                         }
                                     }
-                                    <td class="text-center" style="border:.5px solid black ">@ProductSKU2</td>
-                                    <td class="text-center" style="border:.5px solid black ">@ProductDesciption2</td>
-                                    <td class="text-center" style="border:.5px solid black ">@qused.First(x => x.Key.Equals("DocumentTotalQuantity")).Value.ToString()</td>
 
-                                }
-                            }
-                            @{
-                        double totalQuatity = qntReturned + qntWaste + qntUsed;
-                        <td class="text-center" style="border:.5px solid black ">@totalQuatity</td>
-                            }
+                                  
+
+                                    @foreach (Dictionary<string, object> qused in selecteddocuments)
+                                    {
+                                        //DocumentParentDocId
+                                        try { 
+                                            if (qused.First(x => x.Key.Equals("DocumentComments")).Value.ToString().ToLower().Contains("waste") && qused.First(x=>x.Key.Equals("DocumentTags")).Value.ToString().Equals(dox))
+                                            {
+                                                qntWaste = double.Parse(qused.First(x => x.Key.Equals("DocumentTotalQuantity")).Value.ToString());
+                                         
+                                                  object[] obs3 = (object[])qused.First(x => x.Key.Equals("DocumentDetails")).Value;
+                         
+                                                  Dictionary<string,object> wasteMaterial = new Dictionary<string, object>();
+                                                foreach( Dictionary<string,object> whichObject in obs3)
+                                                {
+                                                    if(whichObject.First(x=>x.Key.Equals("DocumentRowProductSKU")).Value.ToString().Equals(ProductSKU))
+                                                    {
+                                                        wasteMaterial = whichObject;
+                                                        break;
+                                                    }
+                                                }
+
+                                                  double quntaityWasted=0;
+                                                try { 
+                                                        quntaityWasted  = double.Parse(wasteMaterial.First(x => x.Key.Equals("DocumentRowQuantity")).Value.ToString());
+                                                }catch(Exception e )
+                                                {
+                                                    
+                                                }
+                                                qntWasteFound = false;
+                                                if(quntaityWasted>0)
+                                                {
+                                                    <td class="text-center" style="border:.5px solid black ">@qused.First(x => x.Key.Equals("DocumentComments")).Value: @quntaityWasted</td>
+                                                }
+                                                else
+                                                { 
+                                                    <td class="text-center" style="border:.5px solid black ">-</td>
+                                                   }
+                                               
+                                                break;
+                                            }
+                                        }catch(Exception e)
+                                        { continue; }
+                                        
+                                    }
+                                    
+                                    @if (qntWasteFound)
+                                    {
+                                        <td class="text-center" style="border:.5px solid black ">-</td>
+
+                                    }
+
+                                    @foreach (Dictionary<string, object> qused in selecteddocuments)
+                                    {
+                                        //DocumentParentDocId
+                                        try
+                                        {
+                                            qntWasteFound = true;
+
+                                            if (qused.First(x => x.Key.Equals("DocumentComments")).Value.ToString().ToLower().Contains("return") && qused.First(x => x.Key.Equals("DocumentTags")).Value.ToString().Equals(dox))
+                                            {
+                                                qntReturned = double.Parse(qused.First(x => x.Key.Equals("DocumentTotalQuantity")).Value.ToString());
+                                                object[] obs3 = (object[])qused.First(x => x.Key.Equals("DocumentDetails")).Value;
+
+                                                Dictionary<string, object> wasteMaterial = new Dictionary<string, object>();
+                                                foreach (Dictionary<string, object> whichObject in obs3)
+                                                {
+                                                    if (whichObject.First(x => x.Key.Equals("DocumentRowProductSKU")).Value.ToString().Equals(ProductSKU) )
+                                                    {
+                                                        wasteMaterial = whichObject;
+                                                        break;
+                                                    }
+                                                }
+                                          
+                                           
+                                            <td class="text-center" style="border:.5px solid black ">@wasteMaterial.First(x => x.Key.Equals("DocumentRowQuantity")).Value.ToString()</td>
+                                               
+                                                qntWasteFound = false;
+                                                break;
+                                            }
+                                        }
+                                        catch (Exception e) { continue; }
+                                    }
+                                    @if (qntWasteFound)
+                                    {
+                                        <td class="text-center" style="border:.5px solid black ">-</td>
+                                    }
+                                    @if(doc==0)
+                                    { 
+                                    foreach (Dictionary<string, object> qused in selecteddocuments)
+                                    {
+                                        //DocumentParentDocId
+                                        try
+                                        {
+                                            if (qused.First(x => x.Key.Equals("DocumentComments")).Value.ToString().ToLower().Contains("received") && !qused.First(x => x.Key.Equals("DocumentParentDocId")).Value.ToString().Equals("0") && qused.First(x=>x.Key.Equals("DocumentTags")).Value.ToString().Equals(dox))
+                                            {
+                                                object[] obs3 = (object[])qused.First(x => x.Key.Equals("DocumentDetails")).Value;
+                                                Dictionary<string, object> products2 = (Dictionary<string, object>)obs3[0];
+                                                string ProductSKU2 = products2.First(x => x.Key.Equals("DocumentRowProductSKU")).Value.ToString();
+                                                string ProductDesciption2 = "";
+                                                foreach (Dictionary<string, object> prod2 in Products)
+                                                {
+                                                    if (prod2.First(x => x.Key.Equals("ProductSKU")).Value.ToString().Equals(ProductSKU2))
+                                                    {
+                                                        ProductDesciption2 = prod2.First(x => x.Key.Equals("ProductDescription")).Value.ToString();
+                                                    }
+                                                }
+                                            <td class="text-center" style="border:.5px solid black ">@ProductSKU2</td>
+                                            <td class="text-center" style="border:.5px solid black ">@ProductDesciption2</td>
+                                            <td class="text-center" style="border:.5px solid black ">@qused.First(x => x.Key.Equals("DocumentTotalQuantity")).Value.ToString()</td>
+                                          double totalQuatity = qntReturned + qntWaste + qntUsed;
+                                        <td class="text-center" style="border:.5px solid black ">@totalQuatity</td>
+                                            }
+                                        }
+                                        catch (Exception e) { continue; }
+                                    }
+                                    }
+                                    else
+                                    {
+                                          <td class="text-center" style="border:.5px solid black ">-</td>
+                                            <td class="text-center" style="border:.5px solid black ">-</td>
+                                            <td class="text-center" style="border:.5px solid black ">-</td>
+                                          
+                                        <td class="text-center" style="border:.5px solid black ">-</td>
+                                    }
+                                  
 
 
-                        </tr>
+                                </tr>
+                    }
                     }
                 }
+                
             </tbody>
 
             <tfoot>
@@ -261,15 +373,16 @@
                     <th style="border: .5px solid black; width: 3%;">Sr#</th>
                     <th style="border: .5px solid black; width: 12%;">Date</th>
                     <th style="border: .5px solid black; width: 12%;">Sub Supplier Name</th>
-                    <th style="border: .5px solid black; width: 8%;">Type</th>
+                    <th style="border: .5px solid black; width: 10%;">Code</th>
+                    <th style="border: .5px solid black; width: 8%;">Description</th>
                     <th style="border: .5px solid black; width: 18%;">QNT Sent</th>
                     <th style="border: .5px solid black; width: 3%;">QNT Used</th>
-                    <th style="border: .5px solid black; width: 10%;">Code</th>
-                    <th style="border: .5px solid black; width: 10%;">Waste KNIT</th>
-                    <th style="border: .5px solid black; width: 8%;">Waste Wash</th>
+
+
+                    <th style="border: .5px solid black; width: 8%;">Waste</th>
                     <th style="border: .5px solid black; width: 8%;">Returned QNT</th>
                     <th style="border: .5px solid black; width: 8%;">Code</th>
-                    <th style="border: .5px solid black; width: 8%;">TYPE</th>
+                    <th style="border: .5px solid black; width: 8%;">Description</th>
                     <th style="border: .5px solid black; width: 8%;">QNT Fabric</th>
                     <th style="border: .5px solid black; width: 8%;">QNT Used + Wasted + Returned</th>
                 </tr>
