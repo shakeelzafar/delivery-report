@@ -198,7 +198,15 @@
 
                                     <td class="text-center" style="border: .5px solid black; background-color: #f2f4f7;">@srNo</td>
                                     <td class="text-center" style="border: .5px solid black; background-color: #d89c6e;">@actualDate</td>
+                                @if(doc==0)
+                                { 
                                     <td class="text-center" style="border:.5px solid black ">@salesObj.First(x => x.Key.Equals("DocumentContactPerson")).Value.ToString()</td>
+                                }
+                                else
+                                {
+                                    <td class="text-center" style="border:.5px solid black ">-</td>
+                                }
+    
                                 <td class="text-center" style="border:.5px solid black ">@ProductSKU</td>    
                                 <td class="text-center" style="border:.5px solid black ">@ProductDesciption</td>
                                     <td class="text-center" style="border:.5px solid black ">@products.First(x => x.Key.Equals("DocumentRowQuantity")).Value.ToString()</td>
