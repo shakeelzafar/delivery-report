@@ -158,11 +158,16 @@
                         //else { actualDate2 = ""; }
                         
                             
-                        string dox = "Dox # " + salesObj.First(x => x.Key.Equals("DocumentNo")).Value.ToString();
+                        string dox = salesObj.First(x => x.Key.Equals("DocumentNo")).Value.ToString();
                         List<Dictionary<string, object>> selecteddocuments = new List<Dictionary<string, object>>();
                         foreach (Dictionary<string, object> sobject in Documents)
                         {
-                               try { 
+                               try {
+                                   string docc2 = sobject.First(x => x.Key.Equals("DocumentNo")).Value.ToString();
+                                   if(docc2.Equals("31"))
+                                   {
+                                       int hhh = 9;
+                                   }
                             if (sobject.First(x => x.Key.Equals("DocumentTags")).Value.ToString().Equals(dox))
                             {
                                 selecteddocuments.Add(sobject);
@@ -276,7 +281,7 @@
                                                 qntWasteFound = false;
                                                 if(quntaityWasted>0)
                                                 {
-                                                    <td class="text-center" style="border:.5px solid black ">@qused.First(x => x.Key.Equals("DocumentComments")).Value: @quntaityWasted</td>
+                                                    <td class="text-center" style="border:.5px solid black "> @quntaityWasted</td>
                                                 }
                                                 else
                                                 { 
@@ -331,14 +336,13 @@
                                     {
                                         <td class="text-center" style="border:.5px solid black ">-</td>
                                     }
-                                    @if(doc==0)
-                                    { 
-                                    foreach (Dictionary<string, object> qused in selecteddocuments)
+                                   
+                                    @foreach (Dictionary<string, object> qused in selecteddocuments)
                                     {
                                         //DocumentParentDocId
                                         try
                                         {
-                                            if (qused.First(x => x.Key.Equals("DocumentComments")).Value.ToString().ToLower().Contains("received") && !qused.First(x => x.Key.Equals("DocumentParentDocId")).Value.ToString().Equals("0") && qused.First(x=>x.Key.Equals("DocumentTags")).Value.ToString().Equals(dox))
+                                            if (qused.First(x => x.Key.Equals("DocumentComments")).Value.ToString().ToLower().Contains("received") && qused.First(x=>x.Key.Equals("DocumentTags")).Value.ToString().Equals(dox))
                                             {
                                                 object[] obs3 = (object[])qused.First(x => x.Key.Equals("DocumentDetails")).Value;
                                                 Dictionary<string, object> products2 = (Dictionary<string, object>)obs3[0];
@@ -351,25 +355,29 @@
                                                         ProductDesciption2 = prod2.First(x => x.Key.Equals("ProductDescription")).Value.ToString();
                                                     }
                                                 }
+                                                if(doc==0)
+                                              {
                                             <td class="text-center" style="border:.5px solid black ">@ProductSKU2</td>
                                             <td class="text-center" style="border:.5px solid black ">@ProductDesciption2</td>
                                             <td class="text-center" style="border:.5px solid black ">@qused.First(x => x.Key.Equals("DocumentTotalQuantity")).Value.ToString()</td>
                                           double totalQuatity = qntReturned + qntWaste + qntUsed;
                                         <td class="text-center" style="border:.5px solid black ">@totalQuatity</td>
-                                            }
+                                                }
+                                                else
+                                                {
+                                                    
+                                                      <td  class="text-center" style="border:.5px solid black "><div hidden>@ProductSKU2</div></td>
+                                            <td class="text-center" style="border:.5px solid black "><div hidden>@ProductDesciption2</div></td>
+                                            <td class="text-center" style="border:.5px solid black "><div hidden>@qused.First(x => x.Key.Equals("DocumentTotalQuantity")).Value.ToString()</div></td>
+                                          double totalQuatity = qntReturned + qntWaste + qntUsed;
+                                        <td class="text-center" style="border:.5px solid black "><div hidden>@totalQuatity</div></td>
+                                                }
+                                       
+                                        }
                                         }
                                         catch (Exception e) { continue; }
                                     }
-                                    }
-                                    else
-                                    {
-                                          <td class="text-center" style="border:.5px solid black ">-</td>
-                                            <td class="text-center" style="border:.5px solid black ">-</td>
-                                            <td class="text-center" style="border:.5px solid black ">-</td>
-                                          
-                                        <td class="text-center" style="border:.5px solid black ">-</td>
-                                    }
-                                  
+                                     
 
 
                                 </tr>
