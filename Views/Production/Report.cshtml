@@ -1,0 +1,266 @@
+﻿@{
+    Layout = null;
+   
+    List<Dictionary<string, object>> WorkOrders = (List<Dictionary<string, object>>)Session["WorkOrders"];
+    List<Dictionary<string, object>> Products = (List<Dictionary<string, object>>)Session["Products"];
+    int srNo = 0;
+}
+<html>
+<head>
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.15/css/jquery.dataTables.min.css">
+    <title>Delivery Report Table</title>
+
+</head>
+<body style="background-color: #f2f4f7; min-height: 841.89px">
+
+
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/0.4.1/html2canvas.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/0.4.1/html2canvas.min.js"></script>
+
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.0.272/jspdf.debug.js"></script>
+    <script type='text/javascript'>
+        function makePDF() {
+            html2canvas(document.body, {
+                onrendered: function (canvas) {
+
+                    var contentWidth = canvas.width;
+                    var contentHeight = canvas.height;
+
+                    //The height of the canvas which one pdf page can show;
+                    var pageHeight = contentWidth / 592.28 * 841.89;
+                    //the height of canvas that haven't render to pdf
+                    var leftHeight = contentHeight;
+                    //addImage y-axial offset
+                    var position = 0;
+                    //a4 format [595.28,841.89]
+                    var imgWidth = 595.28;
+                    var imgHeight = 592.28 / contentWidth * contentHeight;
+
+                    var pageData = canvas.toDataURL('image/jpeg', 1.0);
+
+                    var pdf = new jsPDF('', 'pt', 'a4');
+
+                    if (leftHeight < pageHeight) {
+                        pdf.addImage(pageData, 'JPEG', 0, 40, imgWidth, imgHeight);
+                    } else {
+                        while (leftHeight > 0) {
+                            pdf.addImage(pageData, 'JPEG', 0, position, imgWidth, imgHeight)
+                            leftHeight -= pageHeight;
+                            position -= 841.89;
+                            //avoid blank page
+                            if (leftHeight > 0) {
+                                pdf.addPage();
+                            }
+                        }
+                    }
+
+                    pdf.save('Delivery Report.pdf');
+                }
+            })
+
+        }
+    </script>
+
+
+
+    <div id="content">
+
+        <div>
+            <table style="width:100%;border-collapse:collapse; " width="100%">
+                <tbody>
+                    <tr><td rowspan="5" style="border:1px solid black;padding:5px; "><div style="width:90%"><img src="../../Content/logo20.png" /></div> </td><td colspan="2" rowspan="1" style="border: 1px solid black; padding: 5px; text-align: center;"><span style="font-size: 10pt;"><span style="font-size: 10pt;"><strong><a style="background-color: #f2f4f7; text-decoration-style: initial; text-decoration-color: initial;">Email: sales@profineworld.com,&nbsp;&nbsp;</a><a target="_blank" style="background-color: #f2f4f7; text-decoration-style: initial; text-decoration-color: initial;">www.profineworld.com</a></strong></span><span style="font-size: 10pt;">&nbsp;</span></span></td></tr>
+                    <tr><td class="text-center" style="border:1px solid black;padding:5px;width:30% "><div><p style="font-weight:bold;text-align:center"><span style="font-size: 12pt;">Display &amp; head office</span></p></div></td><td class="text-center" style="border:1px solid black;padding:5px;width:40%;"><div><p style="font-weight:bold;text-align:center"><span style="font-size: 12pt;">Gulberg Display</span></p></div></td></tr>
+                    <tr><td class="text-center" style="border:1px solid black;padding:5px"><div><p style="text-align:center"><span style="font-size: 12pt;"><span style="font-size: 12pt;"><span style="font-size: 12pt;">6 Mecleod Road, Lahore,Tel:042-37226257,Cell: 03244896776</span>  </span></span></p></div></td><td class="text-center" style="border:1px solid black;padding:5px"><div><p style="text-align:center"><span style="font-size: 12pt;">119-P M.M Alam road, Gulberg 2,Lahore, Tel:042-35778848, Cell: 0302-8427699</span></p></div></td></tr>
+
+                    <tr><td rowspan="2" colspan="2" style="border-bottom:1px solid black; border-right:1px solid black"><div><p style="font-weight:bold;text-align:center; margin-bottom:-3px; "><span style="font-size: 12pt;">Islamabad Dealership</span></p><p style="text-align:center;font-size: 12pt; ">Plaza #: 39, Main Golra Rd, Service Lane, Near Audi Center, Islamabad, Tel: 051 5495731</p></div></td></tr>
+                </tbody>
+            </table>
+            <a style="margin-top:2%" class="button" href="javascript:exportTableToCSV('Delivery Report.csv')">Export This Table to Excell</a>
+            <a style="margin-left:65%" href="javascript:makePDF()" class="button">Print this Document.</a>
+
+        </div><br />
+
+        <h3 style="font-weight:bold;text-align:center;padding-top:3px; padding-bottom:2px; border-bottom: 2px solid #000000; border-top: 2px solid #000000;margin-bottom:15px">Delivery Products Report </h3>
+        <table id="example" cellspacing="0" width="100%">
+            <thead>
+                <tr>
+                    <th style="border: .5px solid black; width: 3%;">Sr#</th>
+                    <th style="border: .5px solid black; width: 12%;">Date</th>
+                    <th style="border: .5px solid black; width: 12%;">WorkOrder No</th>
+                    
+                    <th style="border: .5px solid black; width: 18%;">SKU</th>
+                    <th style="border: .5px solid black; width: 10%;">Product Name</th>
+                    <th style="border: .5px solid black; width: 3%;">Qty. Ordered</th>
+                    <th style="border: .5px solid black; width: 10%;">Qty. Received</th>
+                    <th style="border: .5px solid black; width: 10%;">OverHead Charges</th>
+
+                    <th style="border: .5px solid black; width: 8%;">Total OverHead Charges</th>
+                    <th style="border: .5px solid black; width: 8%;">Labour</th>
+                    <th style="border: .5px solid black; width: 8%;">Total Labour</th>
+                    <th style="border: .5px solid black; width: 8%;">Raw Material Cost</th>
+                    <th style="border: .5px solid black; width: 8%;">Total Raw Material Cost</th>
+                    <th style="border: .5px solid black; width: 8%;">Total Production Cost</th>
+                    <th style="border: .5px solid black; width: 8%;">Status</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                @foreach (Dictionary<string, object> salesObj in WorkOrders)
+                {
+                    string status = salesObj.First(x => x.Key.Equals("WorkOrderStatus")).Value.ToString();
+                    if (!status.Equals("Cancelled"))
+                    {
+                        
+                        double overhead = 0;
+                        double labour = 0, rawMaterial = 0;
+                        string productSKKU= salesObj.First(xx=>xx.Key.Equals("WorkOrderFinishedGoodSKU")).Value.ToString();
+                        string ProductDescription = "";
+                        foreach(Dictionary<string, object> productOf in Products)
+                        {
+                            if(productOf.First(xx=>xx.Key.Equals("ProductSKU")).Value.ToString().Equals(productSKKU))
+                            {
+                                try
+                                {
+                                    overhead = double.Parse(productOf.First(x => x.Key.Equals("ProductCustomField1")).Value.ToString());
+                                }
+                                catch (Exception ee) { }
+                                try
+                                {
+                                    labour = double.Parse(productOf.First(x => x.Key.Equals("ProductCustomField2")).Value.ToString());
+                                }
+                                catch (Exception ee) { }
+                                try
+                                {
+                                    rawMaterial = double.Parse(productOf.First(x => x.Key.Equals("ProductCustomField3")).Value.ToString());
+                                }
+                                catch (Exception ee) { }
+                                try
+                                {
+                                    ProductDescription = productOf.First(x => x.Key.Equals("ProductDescription")).Value.ToString();
+                                }
+                                catch (Exception ee) { }
+                            }
+                        }
+                        
+                        double qntity = double.Parse(salesObj.First(x => x.Key.Equals("WorkOrderReceivedQuantity")).Value.ToString());
+                        double grandTotal = qntity*(overhead+labour+rawMaterial);
+                      
+                        string saleObjectNo = salesObj.First(x => x.Key.Equals("WorkOrderNo")).Value.ToString();
+                        bool exists = false;
+                        String[] Months = { "January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December" };
+                        string iString = salesObj.First(x => x.Key.Equals("WorkOrderCreationDate")).Value.ToString();
+                        DateTime d = Convert.ToDateTime(iString);
+                        String day = d.Day.ToString().Length < 2 ? "0" + d.Day.ToString() : d.Day.ToString();
+                        String actualDate = day + "-" + Months[int.Parse(d.Month.ToString()) - 1] + "-" + d.Year.ToString();
+                        srNo++;
+                      
+                        <tr style="background-color: #d89c6e">
+
+                            <td class="text-center" style="border: .5px solid black; background-color: #f2f4f7;">@srNo</td>
+                            <td class="text-center" style="border: .5px solid black; background-color: #d89c6e;">@actualDate</td>                            
+                            <td class="text-center" style="border:.5px solid black ">@salesObj.First(x => x.Key.Equals("WorkOrderNo")).Value.ToString()</td>
+                            <td class="text-center" style="border:.5px solid black ">@productSKKU</td>
+                            <td class="text-center" style="border:.5px solid black ">@ProductDescription</td>
+                            <td class="text-center" style="border:.5px solid black ">@salesObj.First(x => x.Key.Equals("WorkOrderOrderedQuantity")).Value.ToString()</td>
+                            <td class="text-center" style="border:.5px solid black ">@qntity</td>
+                            <td class="text-center" style="border:.5px solid black "> @Convert.ToDecimal(overhead).ToString("#,##0.00")</td>
+                            <td class="text-center" style="border:.5px solid black "> @Convert.ToDecimal(overhead*qntity).ToString("#,##0.00")</td>
+
+                            <td class="text-center" style="border:.5px solid black "> @Convert.ToDecimal(labour).ToString("#,##0.00")</td>
+                            <td class="text-center" style="border:.5px solid black "> @Convert.ToDecimal(labour * qntity).ToString("#,##0.00")</td>
+
+                            <td class="text-center" style="border:.5px solid black "> @Convert.ToDecimal(rawMaterial).ToString("#,##0.00")</td>
+                            <td class="text-center" style="border:.5px solid black "> @Convert.ToDecimal(rawMaterial * qntity).ToString("#,##0.00")</td>
+                            <td class="text-center" style="border:.5px solid black "> @Convert.ToDecimal(grandTotal).ToString("#,##0.00")</td>
+                            <td class="text-center" style="border:.5px solid black "> @status</td>
+
+                        </tr>
+                }
+               }
+
+                </tbody>
+
+            <tfoot>
+                <tr>
+                    <th style="border: .5px solid black; width: 3%;">Sr#</th>
+                    <th style="border: .5px solid black; width: 12%;">Date</th>
+                    <th style="border: .5px solid black; width: 12%;">WorkOrder No</th>
+                    
+                    <th style="border: .5px solid black; width: 18%;">SKU</th>
+                    <th style="border: .5px solid black; width: 10%;">Product Name</th>
+                    <th style="border: .5px solid black; width: 3%;">Qty. Ordered</th>
+                    <th style="border: .5px solid black; width: 10%;">Qty. Received</th>
+                    <th style="border: .5px solid black; width: 10%;">OverHead Charges</th>
+
+                    <th style="border: .5px solid black; width: 8%;">Total OverHead Charges</th>
+                    <th style="border: .5px solid black; width: 8%;">Labour</th>
+                    <th style="border: .5px solid black; width: 8%;">Total Labour</th>
+                    <th style="border: .5px solid black; width: 8%;">Raw Material Cost</th>
+                    <th style="border: .5px solid black; width: 8%;">Total Raw Material Cost</th>
+                    <th style="border: .5px solid black; width: 8%;">Total Production Cost</th>
+                    <th style="border: .5px solid black; width: 8%;">Status</th>
+                </tr>
+            </tfoot>
+        </table>
+        <script type="text/javascript" charset="utf8" src="../../Content/jquery-1.8.2.min.js"></script>
+        <script type="text/javascript" charset="utf8" src="../../Content/jquery.dataTables.min.js"></script>
+        <script>
+
+            $(function () {
+                $("#example").dataTable();
+
+            })
+
+        </script>
+
+    </div>
+
+
+    <script>
+        function downloadCSV(csv, filename) {
+            var csvFile;
+            var downloadLink;
+
+            // CSV file
+            csvFile = new Blob([csv], { type: "text/csv" });
+
+            // Download link
+            downloadLink = document.createElement("a");
+
+            // File name
+            downloadLink.download = filename;
+
+            // Create a link to the file
+            downloadLink.href = window.URL.createObjectURL(csvFile);
+
+            // Hide download link
+            downloadLink.style.display = "none";
+
+            // Add the link to DOM
+            document.body.appendChild(downloadLink);
+
+            // Click download link
+            downloadLink.click();
+        }
+        function exportTableToCSV(filename) {
+            var csv = [];
+            var rows = document.querySelectorAll("table tr");
+
+            for (var i = 4; i < rows.length; i++) {
+                var row = [], cols = rows[i].querySelectorAll("td, th");
+
+                for (var j = 0; j < cols.length; j++)
+                    row.push(cols[j].innerText);
+
+                csv.push(row.join(","));
+            }
+
+            // Download CSV file
+            downloadCSV(csv.join("\n"), filename);
+        }
+    </script>
+
+
+
+</body>
+</html>

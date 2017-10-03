@@ -342,7 +342,7 @@
                                         //DocumentParentDocId
                                         try
                                         {
-                                            if (qused.First(x => x.Key.Equals("DocumentComments")).Value.ToString().ToLower().Contains("received") && qused.First(x=>x.Key.Equals("DocumentTags")).Value.ToString().Equals(dox))
+                                            if (qused.First(x => x.Key.Equals("DocumentComments")).Value.ToString().ToLower().Contains("receive") && qused.First(x=>x.Key.Equals("DocumentTags")).Value.ToString().Equals(dox))
                                             {
                                                 object[] obs3 = (object[])qused.First(x => x.Key.Equals("DocumentDetails")).Value;
                                                 Dictionary<string, object> products2 = (Dictionary<string, object>)obs3[0];
@@ -361,7 +361,7 @@
                                             <td class="text-center" style="border:.5px solid black ">@ProductDesciption2</td>
                                             <td class="text-center" style="border:.5px solid black ">@qused.First(x => x.Key.Equals("DocumentTotalQuantity")).Value.ToString()</td>
                                           double totalQuatity = qntReturned + qntWaste + qntUsed;
-                                        <td class="text-center" style="border:.5px solid black ">@totalQuatity</td>
+                                        <td class="text-center" style="border:.5px solid black ">@qntReturned + @qntWaste + @qntUsed = @totalQuatity</td>
                                                 }
                                                 else
                                                 {
@@ -370,7 +370,7 @@
                                             <td class="text-center" style="border:.5px solid black "><div hidden>@ProductDesciption2</div></td>
                                             <td class="text-center" style="border:.5px solid black "><div hidden>@qused.First(x => x.Key.Equals("DocumentTotalQuantity")).Value.ToString()</div></td>
                                           double totalQuatity = qntReturned + qntWaste + qntUsed;
-                                        <td class="text-center" style="border:.5px solid black "><div hidden>@totalQuatity</div></td>
+                                        <td class="text-center" style="border:.5px solid black "><div hidden> @totalQuatity</div></td>
                                                 }
                                        
                                         }
