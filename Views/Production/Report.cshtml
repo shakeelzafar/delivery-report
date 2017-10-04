@@ -4,11 +4,12 @@
     List<Dictionary<string, object>> WorkOrders = (List<Dictionary<string, object>>)Session["WorkOrders"];
     List<Dictionary<string, object>> Products = (List<Dictionary<string, object>>)Session["Products"];
     int srNo = 0;
+    double grandOverHead = 0, grandLabor = 0, grandRawMaterial = 0;
 }
 <html>
 <head>
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.15/css/jquery.dataTables.min.css">
-    <title>Delivery Report Table</title>
+    <title>Production Report</title>
 
 </head>
 <body style="background-color: #f2f4f7; min-height: 841.89px">
@@ -54,7 +55,7 @@
                         }
                     }
 
-                    pdf.save('Delivery Report.pdf');
+                    pdf.save('Production Report.pdf');
                 }
             })
 
@@ -75,12 +76,12 @@
                     <tr><td rowspan="2" colspan="2" style="border-bottom:1px solid black; border-right:1px solid black"><div><p style="font-weight:bold;text-align:center; margin-bottom:-3px; "><span style="font-size: 12pt;">Islamabad Dealership</span></p><p style="text-align:center;font-size: 12pt; ">Plaza #: 39, Main Golra Rd, Service Lane, Near Audi Center, Islamabad, Tel: 051 5495731</p></div></td></tr>
                 </tbody>
             </table>
-            <a style="margin-top:2%" class="button" href="javascript:exportTableToCSV('Delivery Report.csv')">Export This Table to Excell</a>
+            <a style="margin-top:2%" class="button" href="javascript:exportTableToCSV('Production Report.csv')">Export This Table to Excell</a>
             <a style="margin-left:65%" href="javascript:makePDF()" class="button">Print this Document.</a>
 
         </div><br />
 
-        <h3 style="font-weight:bold;text-align:center;padding-top:3px; padding-bottom:2px; border-bottom: 2px solid #000000; border-top: 2px solid #000000;margin-bottom:15px">Delivery Products Report </h3>
+        <h3 style="font-weight:bold;text-align:center;padding-top:3px; padding-bottom:2px; border-bottom: 2px solid #000000; border-top: 2px solid #000000;margin-bottom:15px">Production Report </h3>
         <table id="example" cellspacing="0" width="100%">
             <thead>
                 <tr>
@@ -112,6 +113,7 @@
                     {
                         
                         double overhead = 0;
+                        
                         double labour = 0, rawMaterial = 0;
                         string productSKKU= salesObj.First(xx=>xx.Key.Equals("WorkOrderFinishedGoodSKU")).Value.ToString();
                         string ProductDescription = "";
@@ -142,8 +144,10 @@
                             }
                         }
                         
+                        
                         double qntity = double.Parse(salesObj.First(x => x.Key.Equals("WorkOrderReceivedQuantity")).Value.ToString());
                         double grandTotal = qntity*(overhead+labour+rawMaterial);
+                        grandLabor += labour * qntity; grandOverHead += overhead * qntity; grandRawMaterial += rawMaterial * qntity;
                       
                         string saleObjectNo = salesObj.First(x => x.Key.Equals("WorkOrderNo")).Value.ToString();
                         bool exists = false;
@@ -154,7 +158,7 @@
                         String actualDate = day + "-" + Months[int.Parse(d.Month.ToString()) - 1] + "-" + d.Year.ToString();
                         srNo++;
                       
-                        <tr style="background-color: #d89c6e">
+                        <tr style="background-color: #ebe9e9">
 
                             <td class="text-center" style="border: .5px solid black; background-color: #f2f4f7;">@srNo</td>
                             <td class="text-center" style="border: .5px solid black; background-color: #d89c6e;">@actualDate</td>                            
@@ -181,6 +185,27 @@
                 </tbody>
 
             <tfoot>
+                <tr>
+                    <td style="border: .5px solid black; ">-</td>
+                    <td style="border: .5px solid black; ">-</td>
+                    <td style="border: .5px solid black; ">-</td>
+                    <td style="border: .5px solid black; ">-</td>
+                    <td style="border: .5px solid black; ">-</td>
+                    <td style="border: .5px solid black; ">-</td>
+                    <td style="border: .5px solid black; ">-</td>
+                    <td style="border: .5px solid black; ">-</td>
+                    <td style="border: .5px solid black; ">@grandOverHead</td>
+                    <td style="border: .5px solid black; ">-</td>
+                    <td style="border: .5px solid black; ">@grandLabor</td>
+                    <td style="border: .5px solid black; ">-</td>
+                    <td style="border: .5px solid black; ">@grandRawMaterial</td>
+                    @{
+                        double grand = grandRawMaterial + grandOverHead + grandLabor;
+                    }
+                    <td style="border: .5px solid black; ">@grand</td>
+                    <td style="border: .5px solid black; ">-</td>
+                  
+                </tr>
                 <tr>
                     <th style="border: .5px solid black; width: 3%;">Sr#</th>
                     <th style="border: .5px solid black; width: 12%;">Date</th>
