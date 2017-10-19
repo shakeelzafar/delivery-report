@@ -8,8 +8,24 @@
 }
 <html>
 <head>
-    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.15/css/jquery.dataTables.min.css">
+    
     <title>Production Report</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+   
+    <link href="https://www.jqueryscript.net/css/jquerysctipttop.css" rel="stylesheet" type="text/css">
+    <!-- Load jQuery -->
+    <script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
+    <!-- Load the plugin bundle. -->
+    <script src="../../Content/table/src/jsfile.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.0.0-alpha.6/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="../../Content/table/src/excel-bootstrap-table-filter-style.css" />
+    <style>
+        body {
+            background-color: #fafafa;
+        }
+
+        
+    </style>
 
 </head>
 <body style="background-color: #f2f4f7; min-height: 841.89px">
@@ -82,210 +98,209 @@
         </div><br />
 
         <h3 style="font-weight:bold;text-align:center;padding-top:3px; padding-bottom:2px; border-bottom: 2px solid #000000; border-top: 2px solid #000000;margin-bottom:15px">Production Report </h3>
-        <table id="example" cellspacing="0" width="100%">
-            <thead>
-                <tr>
-                    <th style="border: .5px solid black; width: 3%;">Sr#</th>
-                    <th style="border: .5px solid black; width: 12%;">Date</th>
-                    <th style="border: .5px solid black; width: 12%;">WorkOrder No</th>
-                    
-                    <th style="border: .5px solid black; width: 18%;">SKU</th>
-                    <th style="border: .5px solid black; width: 10%;">Product Name</th>
-                    <th style="border: .5px solid black; width: 3%;">Qty. Ordered</th>
-                    <th style="border: .5px solid black; width: 10%;">Qty. Received</th>
-                    <th style="border: .5px solid black; width: 10%;">OverHead Charges</th>
+        <div class="container" style="margin-left:-10px">
+            <div class="row">
+                <div class="col-md-12">
+                    <table id="table" class="table table-bordered table-intel">
+                        <thead>
+                            <tr class="table-info">
 
-                    <th style="border: .5px solid black; width: 8%;">Total OverHead Charges</th>
-                    <th style="border: .5px solid black; width: 8%;">Labour</th>
-                    <th style="border: .5px solid black; width: 8%;">Total Labour</th>
-                    <th style="border: .5px solid black; width: 8%;">Raw Material Cost</th>
-                    <th style="border: .5px solid black; width: 8%;">Total Raw Material Cost</th>
-                    <th style="border: .5px solid black; width: 8%;">Total Production Cost</th>
-                    <th style="border: .5px solid black; width: 8%;">Status</th>
-                </tr>
-            </thead>
+                                <th style="border: .5px solid black; width: 3%;">Sr#</th>
+                                <th style="border: .5px solid black; width: 12%;">Date</th>
+                                <th style="border: .5px solid black; width: 12%;">WorkOrder No</th>
 
-            <tbody>
-                @foreach (Dictionary<string, object> salesObj in WorkOrders)
-                {
-                    string status = salesObj.First(x => x.Key.Equals("WorkOrderStatus")).Value.ToString();
-                    if (!status.Equals("Cancelled"))
-                    {
-                        
-                        double overhead = 0;
-                        
-                        double labour = 0, rawMaterial = 0;
-                        string productSKKU= salesObj.First(xx=>xx.Key.Equals("WorkOrderFinishedGoodSKU")).Value.ToString();
-                        string ProductDescription = "";
-                        foreach(Dictionary<string, object> productOf in Products)
-                        {
-                            if(productOf.First(xx=>xx.Key.Equals("ProductSKU")).Value.ToString().Equals(productSKKU))
+                                <th style="border: .5px solid black; width: 18%;">SKU</th>
+                                <th style="border: .5px solid black; width: 10%;">Product Name</th>
+                                <th style="border: .5px solid black; width: 3%;">Qty. Ordered</th>
+                                <th style="border: .5px solid black; width: 10%;">Qty. Received</th>
+                                <th style="border: .5px solid black; width: 10%;">OverHead Charges</th>
+
+                                <th style="border: .5px solid black; width: 8%;">Total OverHead Charges</th>
+                                <th style="border: .5px solid black; width: 8%;">Labour</th>
+                                <th style="border: .5px solid black; width: 8%;">Total Labour</th>
+                                <th style="border: .5px solid black; width: 8%;">Raw Material Cost</th>
+                                <th style="border: .5px solid black; width: 8%;">Total Raw Material Cost</th>
+                                <th style="border: .5px solid black; width: 8%;">Total Production Cost</th>
+                                <th style="border: .5px solid black; width: 8%;">Status</th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+                            @foreach (Dictionary<string, object> salesObj in WorkOrders)
                             {
-                                try
+                                string status = salesObj.First(x => x.Key.Equals("WorkOrderStatus")).Value.ToString();
+                                if (!status.Equals("Cancelled"))
                                 {
-                                    overhead = double.Parse(productOf.First(x => x.Key.Equals("ProductCustomField1")).Value.ToString());
+
+                                    double overhead = 0;
+
+                                    double labour = 0, rawMaterial = 0;
+                                    string productSKKU = salesObj.First(xx => xx.Key.Equals("WorkOrderFinishedGoodSKU")).Value.ToString();
+                                    string ProductDescription = "";
+                                    foreach (Dictionary<string, object> productOf in Products)
+                                    {
+                                        if (productOf.First(xx => xx.Key.Equals("ProductSKU")).Value.ToString().Equals(productSKKU))
+                                        {
+                                            try
+                                            {
+                                                overhead = double.Parse(productOf.First(x => x.Key.Equals("ProductCustomField1")).Value.ToString());
+                                            }
+                                            catch (Exception ee) { }
+                                            try
+                                            {
+                                                labour = double.Parse(productOf.First(x => x.Key.Equals("ProductCustomField2")).Value.ToString());
+                                            }
+                                            catch (Exception ee) { }
+                                            try
+                                            {
+                                                rawMaterial = double.Parse(productOf.First(x => x.Key.Equals("ProductCustomField3")).Value.ToString());
+                                            }
+                                            catch (Exception ee) { }
+                                            try
+                                            {
+                                                ProductDescription = productOf.First(x => x.Key.Equals("ProductDescription")).Value.ToString();
+                                            }
+                                            catch (Exception ee) { }
+                                        }
+                                    }
+
+
+                                    double qntity = double.Parse(salesObj.First(x => x.Key.Equals("WorkOrderReceivedQuantity")).Value.ToString());
+                                    double grandTotal = qntity * (overhead + labour + rawMaterial);
+                                    grandLabor += labour * qntity; grandOverHead += overhead * qntity; grandRawMaterial += rawMaterial * qntity;
+
+                                    string saleObjectNo = salesObj.First(x => x.Key.Equals("WorkOrderNo")).Value.ToString();
+                                    bool exists = false;
+                                    String[] Months = { "January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December" };
+                                    string iString = salesObj.First(x => x.Key.Equals("WorkOrderCreationDate")).Value.ToString();
+                                    DateTime d = Convert.ToDateTime(iString);
+                                    String day = d.Day.ToString().Length < 2 ? "0" + d.Day.ToString() : d.Day.ToString();
+                                    String actualDate = day + "-" + Months[int.Parse(d.Month.ToString()) - 1] + "-" + d.Year.ToString();
+                                    srNo++;
+
+                                    <tr style="background-color: #ebe9e9">
+
+                                        <td class="text-center" style="border: .5px solid black; background-color: #f2f4f7;">@srNo</td>
+                                        <td class="text-center" style="border: .5px solid black; background-color: #d89c6e;">@actualDate</td>
+                                        <td class="text-center" style="border:.5px solid black ">@salesObj.First(x => x.Key.Equals("WorkOrderNo")).Value.ToString()</td>
+                                        <td class="text-center" style="border:.5px solid black ">@productSKKU</td>
+                                        <td class="text-center" style="border:.5px solid black ">@ProductDescription</td>
+                                        <td class="text-center" style="border:.5px solid black ">@salesObj.First(x => x.Key.Equals("WorkOrderOrderedQuantity")).Value.ToString()</td>
+                                        <td class="text-center" style="border:.5px solid black ">@qntity</td>
+                                        <td class="text-center" style="border:.5px solid black "> @Convert.ToDecimal(overhead).ToString("#,##0.00")</td>
+                                        <td class="text-center" style="border:.5px solid black "> @Convert.ToDecimal(overhead * qntity).ToString("#,##0.00")</td>
+
+                                        <td class="text-center" style="border:.5px solid black "> @Convert.ToDecimal(labour).ToString("#,##0.00")</td>
+                                        <td class="text-center" style="border:.5px solid black "> @Convert.ToDecimal(labour * qntity).ToString("#,##0.00")</td>
+
+                                        <td class="text-center" style="border:.5px solid black "> @Convert.ToDecimal(rawMaterial).ToString("#,##0.00")</td>
+                                        <td class="text-center" style="border:.5px solid black "> @Convert.ToDecimal(rawMaterial * qntity).ToString("#,##0.00")</td>
+                                        <td class="text-center" style="border:.5px solid black "> @Convert.ToDecimal(grandTotal).ToString("#,##0.00")</td>
+                                        <td class="text-center" style="border:.5px solid black "> @status</td>
+
+                                    </tr>
                                 }
-                                catch (Exception ee) { }
-                                try
-                                {
-                                    labour = double.Parse(productOf.First(x => x.Key.Equals("ProductCustomField2")).Value.ToString());
-                                }
-                                catch (Exception ee) { }
-                                try
-                                {
-                                    rawMaterial = double.Parse(productOf.First(x => x.Key.Equals("ProductCustomField3")).Value.ToString());
-                                }
-                                catch (Exception ee) { }
-                                try
-                                {
-                                    ProductDescription = productOf.First(x => x.Key.Equals("ProductDescription")).Value.ToString();
-                                }
-                                catch (Exception ee) { }
                             }
-                        }
-                        
-                        
-                        double qntity = double.Parse(salesObj.First(x => x.Key.Equals("WorkOrderReceivedQuantity")).Value.ToString());
-                        double grandTotal = qntity*(overhead+labour+rawMaterial);
-                        grandLabor += labour * qntity; grandOverHead += overhead * qntity; grandRawMaterial += rawMaterial * qntity;
-                      
-                        string saleObjectNo = salesObj.First(x => x.Key.Equals("WorkOrderNo")).Value.ToString();
-                        bool exists = false;
-                        String[] Months = { "January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December" };
-                        string iString = salesObj.First(x => x.Key.Equals("WorkOrderCreationDate")).Value.ToString();
-                        DateTime d = Convert.ToDateTime(iString);
-                        String day = d.Day.ToString().Length < 2 ? "0" + d.Day.ToString() : d.Day.ToString();
-                        String actualDate = day + "-" + Months[int.Parse(d.Month.ToString()) - 1] + "-" + d.Year.ToString();
-                        srNo++;
-                      
-                        <tr style="background-color: #ebe9e9">
+                            <tr>
+                                <td style="border: .5px solid black; ">-</td>
+                                <td style="border: .5px solid black; ">-</td>
+                                <td style="border: .5px solid black; ">-</td>
+                                <td style="border: .5px solid black; ">-</td>
+                                <td style="border: .5px solid black; ">-</td>
+                                <td style="border: .5px solid black; ">-</td>
+                                <td style="border: .5px solid black; ">-</td>
+                                <td style="border: .5px solid black; ">-</td>
+                                <td style="border: .5px solid black; ">@grandOverHead</td>
+                                <td style="border: .5px solid black; ">-</td>
+                                <td style="border: .5px solid black; ">@grandLabor</td>
+                                <td style="border: .5px solid black; ">-</td>
+                                <td style="border: .5px solid black; ">@grandRawMaterial</td>
+                                @{
+                                    double grand = grandRawMaterial + grandOverHead + grandLabor;
+                                }
+                                <td style="border: .5px solid black; ">@grand</td>
+                                <td style="border: .5px solid black; ">-</td>
 
-                            <td class="text-center" style="border: .5px solid black; background-color: #f2f4f7;">@srNo</td>
-                            <td class="text-center" style="border: .5px solid black; background-color: #d89c6e;">@actualDate</td>                            
-                            <td class="text-center" style="border:.5px solid black ">@salesObj.First(x => x.Key.Equals("WorkOrderNo")).Value.ToString()</td>
-                            <td class="text-center" style="border:.5px solid black ">@productSKKU</td>
-                            <td class="text-center" style="border:.5px solid black ">@ProductDescription</td>
-                            <td class="text-center" style="border:.5px solid black ">@salesObj.First(x => x.Key.Equals("WorkOrderOrderedQuantity")).Value.ToString()</td>
-                            <td class="text-center" style="border:.5px solid black ">@qntity</td>
-                            <td class="text-center" style="border:.5px solid black "> @Convert.ToDecimal(overhead).ToString("#,##0.00")</td>
-                            <td class="text-center" style="border:.5px solid black "> @Convert.ToDecimal(overhead*qntity).ToString("#,##0.00")</td>
+                            </tr>
 
-                            <td class="text-center" style="border:.5px solid black "> @Convert.ToDecimal(labour).ToString("#,##0.00")</td>
-                            <td class="text-center" style="border:.5px solid black "> @Convert.ToDecimal(labour * qntity).ToString("#,##0.00")</td>
-
-                            <td class="text-center" style="border:.5px solid black "> @Convert.ToDecimal(rawMaterial).ToString("#,##0.00")</td>
-                            <td class="text-center" style="border:.5px solid black "> @Convert.ToDecimal(rawMaterial * qntity).ToString("#,##0.00")</td>
-                            <td class="text-center" style="border:.5px solid black "> @Convert.ToDecimal(grandTotal).ToString("#,##0.00")</td>
-                            <td class="text-center" style="border:.5px solid black "> @status</td>
-
-                        </tr>
-                }
-               }
-
-                </tbody>
-
-            <tfoot>
-                <tr>
-                    <td style="border: .5px solid black; ">-</td>
-                    <td style="border: .5px solid black; ">-</td>
-                    <td style="border: .5px solid black; ">-</td>
-                    <td style="border: .5px solid black; ">-</td>
-                    <td style="border: .5px solid black; ">-</td>
-                    <td style="border: .5px solid black; ">-</td>
-                    <td style="border: .5px solid black; ">-</td>
-                    <td style="border: .5px solid black; ">-</td>
-                    <td style="border: .5px solid black; ">@grandOverHead</td>
-                    <td style="border: .5px solid black; ">-</td>
-                    <td style="border: .5px solid black; ">@grandLabor</td>
-                    <td style="border: .5px solid black; ">-</td>
-                    <td style="border: .5px solid black; ">@grandRawMaterial</td>
-                    @{
-                        double grand = grandRawMaterial + grandOverHead + grandLabor;
-                    }
-                    <td style="border: .5px solid black; ">@grand</td>
-                    <td style="border: .5px solid black; ">-</td>
-                  
-                </tr>
-                <tr>
-                    <th style="border: .5px solid black; width: 3%;">Sr#</th>
-                    <th style="border: .5px solid black; width: 12%;">Date</th>
-                    <th style="border: .5px solid black; width: 12%;">WorkOrder No</th>
-                    
-                    <th style="border: .5px solid black; width: 18%;">SKU</th>
-                    <th style="border: .5px solid black; width: 10%;">Product Name</th>
-                    <th style="border: .5px solid black; width: 3%;">Qty. Ordered</th>
-                    <th style="border: .5px solid black; width: 10%;">Qty. Received</th>
-                    <th style="border: .5px solid black; width: 10%;">OverHead Charges</th>
-
-                    <th style="border: .5px solid black; width: 8%;">Total OverHead Charges</th>
-                    <th style="border: .5px solid black; width: 8%;">Labour</th>
-                    <th style="border: .5px solid black; width: 8%;">Total Labour</th>
-                    <th style="border: .5px solid black; width: 8%;">Raw Material Cost</th>
-                    <th style="border: .5px solid black; width: 8%;">Total Raw Material Cost</th>
-                    <th style="border: .5px solid black; width: 8%;">Total Production Cost</th>
-                    <th style="border: .5px solid black; width: 8%;">Status</th>
-                </tr>
-            </tfoot>
-        </table>
-        <script type="text/javascript" charset="utf8" src="../../Content/jquery-1.8.2.min.js"></script>
-        <script type="text/javascript" charset="utf8" src="../../Content/jquery.dataTables.min.js"></script>
+                        </tbody>
+ 
+                    </table>
+                </div>
+            </div>
+        </div>
+     
         <script>
 
             $(function () {
-                $("#example").dataTable();
-
-            })
+                // Apply the plugin
+                $('#table').excelTableFilter();
+            });
 
         </script>
 
-    </div>
+    </div> 
+                <script>
+                    function downloadCSV(csv, filename) {
+                        var csvFile;
+                        var downloadLink;
 
+                        // CSV file
+                        csvFile = new Blob([csv], { type: "text/csv" });
 
-    <script>
-        function downloadCSV(csv, filename) {
-            var csvFile;
-            var downloadLink;
+                        // Download link
+                        downloadLink = document.createElement("a");
 
-            // CSV file
-            csvFile = new Blob([csv], { type: "text/csv" });
+                        // File name
+                        downloadLink.download = filename;
 
-            // Download link
-            downloadLink = document.createElement("a");
+                        // Create a link to the file
+                        downloadLink.href = window.URL.createObjectURL(csvFile);
 
-            // File name
-            downloadLink.download = filename;
+                        // Hide download link
+                        downloadLink.style.display = "none";
 
-            // Create a link to the file
-            downloadLink.href = window.URL.createObjectURL(csvFile);
+                        // Add the link to DOM
+                        document.body.appendChild(downloadLink);
 
-            // Hide download link
-            downloadLink.style.display = "none";
+                        // Click download link
+                        downloadLink.click();
+                    }
+                    function exportTableToCSV(filename) {
+                        var csv = [];
+                        var rows = document.querySelectorAll("table tr");
 
-            // Add the link to DOM
-            document.body.appendChild(downloadLink);
+                        for (var i = 4; i < rows.length; i++) {
+                            var row = [], cols = rows[i].querySelectorAll("td, th");
 
-            // Click download link
-            downloadLink.click();
-        }
-        function exportTableToCSV(filename) {
-            var csv = [];
-            var rows = document.querySelectorAll("table tr");
+                            for (var j = 0; j < cols.length; j++)
+                                row.push(cols[j].innerText);
 
-            for (var i = 4; i < rows.length; i++) {
-                var row = [], cols = rows[i].querySelectorAll("td, th");
+                            csv.push(row.join(","));
+                        }
 
-                for (var j = 0; j < cols.length; j++)
-                    row.push(cols[j].innerText);
+                        // Download CSV file
+                        downloadCSV(csv.join("\n"), filename);
+                    }
+                </script>
 
-                csv.push(row.join(","));
-            }
-
-            // Download CSV file
-            downloadCSV(csv.join("\n"), filename);
-        }
-    </script>
 
 
 
 </body>
+<script type="text/javascript">
+
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-36251023-1']);
+    _gaq.push(['_setDomainName', 'jqueryscript.net']);
+    _gaq.push(['_trackPageview']);
+
+    (function () {
+        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+
+</script>
+
 </html>
