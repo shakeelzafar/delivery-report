@@ -1,7 +1,10 @@
-﻿@{
+﻿@using dreport.Models;
+
+@{
     Layout = null;
 
 
+    List<LabonItem> listOfItems = (List<LabonItem>)Session["listOfItems"];
     List<Dictionary<string, object>> WorkOrders = (List<Dictionary<string, object>>)Session["WorkOrders"];
     List<Dictionary<string, object>> Products = (List<Dictionary<string, object>>)Session["Products"];
     List<Dictionary<string, object>> Documents = (List<Dictionary<string, object>>)Session["Documents"];
@@ -104,306 +107,432 @@
                     <th style="border: .5px solid black; width: 3%;">Sr#</th>
                     <th style="border: .5px solid black; width: 12%;">Date</th>
                     <th style="border: .5px solid black; width: 12%;">Sub Supplier Name</th>
+                    <th style="border: .5px solid black; width: 10%;">Tracking Code</th>
                     <th style="border: .5px solid black; width: 10%;">Code</th>
                     <th style="border: .5px solid black; width: 8%;">Description</th>                    
                     <th style="border: .5px solid black; width: 18%;">QNT Sent</th>
-                    <th style="border: .5px solid black; width: 3%;">QNT Used</th>
-                    
-                    
-                    <th style="border: .5px solid black; width: 8%;">Waste</th>
+                    <th style="border: .5px solid black; width: 3%;">QNT Used</th> 
                     <th style="border: .5px solid black; width: 8%;">Returned QNT</th>
+                    <th style="border: .5px solid black; width: 8%;">Waste Knitt</th>                
                     <th style="border: .5px solid black; width: 8%;">Code</th>
                     <th style="border: .5px solid black; width: 8%;">Description</th>
-                    <th style="border: .5px solid black; width: 8%;">QNT Fabric</th>
-                    <th style="border: .5px solid black; width: 8%;">QNT Used + Wasted + Returned</th>
+                    <th style="border: .5px solid black; width: 8%;">QNT Fabric Knitt</th>
+
+                    <th style="border: .5px solid black; width: 8%;">Waste Wash</th>
+                    <th style="border: .5px solid black; width: 8%;">Code</th>
+                    <th style="border: .5px solid black; width: 8%;">Description</th>
+                    <th style="border: .5px solid black; width: 8%;">QNT Fabric Washed</th>
+                    
+                    <th style="border: .5px solid black; width: 8%;">Waste Dying</th>
+                    <th style="border: .5px solid black; width: 8%;">Code</th>
+                    <th style="border: .5px solid black; width: 8%;">Description</th>
+                    <th style="border: .5px solid black; width: 8%;">QNT Fabric Dyed</th>
+
+                    <th style="border: .5px solid black; width: 8%;">Waste Weaving</th>
+                    <th style="border: .5px solid black; width: 8%;">Code</th>
+                    <th style="border: .5px solid black; width: 8%;">Description</th>
+                    <th style="border: .5px solid black; width: 8%;">QNT Fabric Weaved</th>
+
+                    <th style="border: .5px solid black; width: 8%;">Waste Finishing</th>
+                    <th style="border: .5px solid black; width: 8%;">Code</th>
+                    <th style="border: .5px solid black; width: 8%;">Description</th>
+                    <th style="border: .5px solid black; width: 8%;">QNT Fabric Finished</th>
                 </tr>
             </thead>
 
+
             <tbody>
-                @foreach (Dictionary<string, object> salesObj in documents)
+                @foreach(LabonItem labonItem in listOfItems)
                 {
-
-
-                    string[] color = { "#93d5f2", "#add356" };
-                
-                    string status = salesObj.First(x => x.Key.Equals("DocumentStatus")).Value.ToString();
-                    if (!status.Equals("Cancelled"))
+                    int rowspan = labonItem.SKU_ProductSent.Count();
+                   
+                   for (int i = 0; i < rowspan; i++ )
                     {
-                        double qntUsed = 0, qntWaste = 0, qntReturned = 0;
-                        bool qntWasteFound = true;
-
-
-                        String[] Months = { "January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December" };
-                        srNo++;
-                        string iString = salesObj.First(x => x.Key.Equals("DocumentDate")).Value.ToString();
-                        DateTime d = Convert.ToDateTime(iString);
-                        String day = d.Day.ToString().Length < 2 ? "0" + d.Day.ToString() : d.Day.ToString();
-                        String actualDate = day + "-" + Months[int.Parse(d.Month.ToString()) - 1] + " - " + d.Year.ToString();
-
-                        //String actualDate2="";
-                        //iString = salesObj.First(x => x.Key.Equals("SalesOrderCustomOrderDate1")).Value.ToString();
-                        //if (!iString.Contains("0001-01-01"))
-                        //{
-                        //    d = Convert.ToDateTime(iString);
-                        //    day = d.Day.ToString().Length < 2 ? "0" + d.Day.ToString() : d.Day.ToString();
-                        //    actualDate2 = day + "-" + Months[int.Parse(d.Month.ToString()) - 1] + "-" + d.Year.ToString();
-                        //   if(actualDate2.Equals("01-January-2001"))
-                        //   {
-                        //       actualDate2 = "";
-                        //   }if(d.Year.ToString().Equals("0001") || d.Year.ToString().Equals("1"))
-                        //   {
-                        //       actualDate2 = "";
-                        //   }
-                        //}
-                        //else { actualDate2 = ""; }
-                        
-                            
-                        string dox = salesObj.First(x => x.Key.Equals("DocumentNo")).Value.ToString();
-                        List<Dictionary<string, object>> selecteddocuments = new List<Dictionary<string, object>>();
-                        foreach (Dictionary<string, object> sobject in Documents)
+                        try
                         {
-                               try {
-                                   string docc2 = sobject.First(x => x.Key.Equals("DocumentNo")).Value.ToString();
-                                   if(docc2.Equals("31"))
-                                   {
-                                       int hhh = 9;
-                                   }
-                            if (sobject.First(x => x.Key.Equals("DocumentTags")).Value.ToString().Equals(dox))
-                            {
-                                selecteddocuments.Add(sobject);
+                             <tr>
+                            @if (i == 0) { 
+                                    
+                                <td >@labonItem.srNo</td>
+                                <td >@labonItem.date</td>
+                                <td >@labonItem.contactPerson</td>
+                                <td >@labonItem.documentCode</td>
                             }
-                            }catch(Exception e)
+                            else
                             {
-                                
+                                <td >@labonItem.srNo</td>
+                                <td >-</td>
+                                <td >-</td>
+                                <td >-</td>
                             }
-                        }
-                        object[] obs2 = (object[])salesObj.First(x => x.Key.Equals("DocumentDetails")).Value;
-                        int countForLoop = obs2.Count();
-                       
-                        colorNumber++;
-                        for(int doc =0; doc<countForLoop; doc++)    
-                        {
-                            
-                            
-                             Dictionary<string, object> products = (Dictionary<string, object>)obs2[doc];
-                            string ProductSKU = products.First(x => x.Key.Equals("DocumentRowProductSKU")).Value.ToString();
-                            string ProductDesciption = "";
-                            foreach (Dictionary<string, object> prod in Products)
-                            {
-                                try { 
-                                if (prod.First(x => x.Key.Equals("ProductSKU")).Value.ToString().Equals(ProductSKU))
-                                {
-                                    ProductDesciption = prod.First(x => x.Key.Equals("ProductDescription")).Value.ToString();
-                                }
-                                }catch(Exception e)
-                                {
-                                
-                                }
-                            } 
-                            
-                            
-                            <tr style="background-color: @color[colorNumber%2]">
 
-                                    <td class="text-center" style="border: .5px solid black; background-color: #f2f4f7;">@srNo</td>
-                                    <td class="text-center" style="border: .5px solid black; background-color: #d89c6e;">@actualDate</td>
-                                @if(doc==0)
-                                { 
-                                    <td class="text-center" style="border:.5px solid black ">@salesObj.First(x => x.Key.Equals("DocumentContactPerson")).Value.ToString()</td>
+
+                                <td>@labonItem.SKU_ProductSent.ToArray()[i]</td>
+                                <td>@labonItem.Desc_ProductSent.ToArray()[i]</td>
+
+                                 @if (labonItem.QNT_Sent.Count() > i)
+                                 {
+                                     <td>@labonItem.QNT_Sent.ToArray()[i]</td>
+                                 }
+                                 else
+                                 {
+                                     <td>-</td>
+                                 }
+                                 @if (labonItem.QNT_Used.Count() > i)
+                                 {
+                                     <td>@labonItem.QNT_Used.ToArray()[i]</td>
+                                 }
+                                 else
+                                 {
+                                     <td>-</td>
+                                 }
+                                 
+                              
+                                 @if(labonItem.QNT_Returned.Count()>i)
+                                 { 
+                                   <td>@labonItem.QNT_Returned.ToArray()[i]</td>
+                                 }
+                                 else
+                                 {
+                                      <td>-</td>
+                                 }
+
+                                 @if (labonItem.QNT_Waste.Count() > i)
+                                {
+                                    <td>@labonItem.QNT_Waste.ToArray()[i]</td>
                                 }
                                 else
                                 {
-                                    <td class="text-center" style="border:.5px solid black ">-</td>
+                                    <td>-</td>
                                 }
-    
-                                <td class="text-center" style="border:.5px solid black ">@ProductSKU</td>    
-                                <td class="text-center" style="border:.5px solid black ">@ProductDesciption</td>
-                                    <td class="text-center" style="border:.5px solid black ">@products.First(x => x.Key.Equals("DocumentRowQuantity")).Value.ToString()</td>
-                                    @foreach (Dictionary<string, object> qused in WorkOrders)
-                                    {
-                                        //DocumentParentDocId
-                                        if (qused.First(x => x.Key.Equals("WorkOrderTags")).Value.ToString().Equals(dox))
-                                        {
-                                            qntUsed = double.Parse(qused.First(x => x.Key.Equals("WorkOrderReceivedQuantity")).Value.ToString());
-                                            try
-                                            {
-                                                object[] obs3 = (object[])qused.First(x => x.Key.Equals("WorkOrderDetails")).Value;
 
-                                                Dictionary<string, object> WorkMaterial = new Dictionary<string, object>();
-                                                foreach (Dictionary<string, object> vvv in obs3)
-                                                {
-                                                    if (vvv.First(x => x.Key.Equals("WorkOrderBOMRowProductSKU")).Value.ToString().Equals(ProductSKU))
-                                                    {
-                                                        object[] obs4 = (object[])vvv.First(x => x.Key.Equals("WorkOrderRowAllocatedDetails")).Value;
-                                                        Dictionary<string, object> WorkedMaterial = (Dictionary<string, object>)obs4[0];
-                                                       <td class="text-center" style="border:.5px solid black ">@WorkedMaterial.First(x => x.Key.Equals("WorkOrderBOMRowAllocatedQuantity")).Value.ToString()</td>
-                                                    }
-                                                }
+
+                              
+                                
+                                 
+                                 @if(i==0)
+                                 {
+
+                                     int j = 0;
+                                 
+                                     
+                                     bool flag = false;
+                                        for (j = 0; j < labonItem.Desc_ProductReceived.Count(); j++)
+                                        {
+                                            if (labonItem.FPKeys.ToArray()[j].Contains("nit")) {
+                                                flag = true;
+                                                break;
+                                            }
+                                        }
+                                        if (flag)
+                                        {
+
+                                            flag = false;
+                                            <td >@labonItem.SKU_ProductReceived.ToArray()[j]</td>
+                                            <td >@labonItem.Desc_ProductReceived.ToArray()[j]</td>
+                                            <td >@labonItem.QNT_Received.ToArray()[j]</td>
+                                        
+                                        }
+                                        else
+                                        {
+                                             
+                                           <td >-</td><td >-</td><td >-</td>                       
+                                        
+                                        }
+                        
+                                     
+                                     
+                                        j = 0;
+                                        for (j = 0; j < labonItem.Desc_ProductReceived.Count(); j++)
+                                        {
+                                            if (labonItem.FPKeys.ToArray()[j].Contains("ash"))
+                                            {
+                                                flag = true;
+                                                break;
+                                            }
+                                        }
+                                        if (flag)
+                                        {
+                                            flag = false;
+                                              if (labonItem.QNT_1_Waste.Count() > i)
+                                             { 
+                                               <td>@labonItem.QNT_1_Waste.ToArray()[j]</td>
+                                             }
+                                             else
+                                             {
+                                                  <td>-</td>
+                                             }
+                                              if (labonItem.SKU_ProductReceived.Count() > i)
+                                             { 
+                                               <td>@labonItem.SKU_ProductReceived.ToArray()[j]</td>
+                                             }
+                                             else
+                                             {
+                                                  <td>-</td>
+                                             }
+
+                                              if (labonItem.Desc_ProductReceived.Count() > i)
+                                             { 
+                                               <td>@labonItem.Desc_ProductReceived.ToArray()[j]</td>
+                                             }
+                                             else
+                                             {
+                                                  <td>-</td>
+                                             }
+
+                                              if (labonItem.QNT_Received.Count() > i)
+                                             { 
+                                               <td>@labonItem.QNT_Received.ToArray()[j]</td>
+                                             }
+                                             else
+                                             {
+                                                  <td>-</td>
+                                             }
 
                                               
-                                                break;
-                                            }
-                                            catch (Exception e) 
-                                            {
-                                                continue;
-                                            }
-                                        }
-                                    }
-
-                                  
-
-                                    @foreach (Dictionary<string, object> qused in selecteddocuments)
-                                    {
-                                        //DocumentParentDocId
-                                        try { 
-                                            if (qused.First(x => x.Key.Equals("DocumentComments")).Value.ToString().ToLower().Contains("waste") && qused.First(x=>x.Key.Equals("DocumentTags")).Value.ToString().Equals(dox))
-                                            {
-                                                qntWaste = double.Parse(qused.First(x => x.Key.Equals("DocumentTotalQuantity")).Value.ToString());
-                                         
-                                                  object[] obs3 = (object[])qused.First(x => x.Key.Equals("DocumentDetails")).Value;
-                         
-                                                  Dictionary<string,object> wasteMaterial = new Dictionary<string, object>();
-                                                foreach( Dictionary<string,object> whichObject in obs3)
-                                                {
-                                                    if(whichObject.First(x=>x.Key.Equals("DocumentRowProductSKU")).Value.ToString().Equals(ProductSKU))
-                                                    {
-                                                        wasteMaterial = whichObject;
-                                                        break;
-                                                    }
-                                                }
-
-                                                  double quntaityWasted=0;
-                                                try { 
-                                                        quntaityWasted  = double.Parse(wasteMaterial.First(x => x.Key.Equals("DocumentRowQuantity")).Value.ToString());
-                                                }catch(Exception e )
-                                                {
-                                                    
-                                                }
-                                                qntWasteFound = false;
-                                                if(quntaityWasted>0)
-                                                {
-                                                    <td class="text-center" style="border:.5px solid black "> @quntaityWasted</td>
-                                                }
-                                                else
-                                                { 
-                                                    <td class="text-center" style="border:.5px solid black ">-</td>
-                                                   }
-                                               
-                                                break;
-                                            }
-                                        }catch(Exception e)
-                                        { continue; }
-                                        
-                                    }
-                                    
-                                    @if (qntWasteFound)
-                                    {
-                                        <td class="text-center" style="border:.5px solid black ">-</td>
-
-                                    }
-
-                                    @foreach (Dictionary<string, object> qused in selecteddocuments)
-                                    {
-                                        //DocumentParentDocId
-                                        try
-                                        {
-                                            qntWasteFound = true;
-
-                                            if (qused.First(x => x.Key.Equals("DocumentComments")).Value.ToString().ToLower().Contains("return") && qused.First(x => x.Key.Equals("DocumentTags")).Value.ToString().Equals(dox))
-                                            {
-                                                qntReturned = double.Parse(qused.First(x => x.Key.Equals("DocumentTotalQuantity")).Value.ToString());
-                                                object[] obs3 = (object[])qused.First(x => x.Key.Equals("DocumentDetails")).Value;
-
-                                                Dictionary<string, object> wasteMaterial = new Dictionary<string, object>();
-                                                foreach (Dictionary<string, object> whichObject in obs3)
-                                                {
-                                                    if (whichObject.First(x => x.Key.Equals("DocumentRowProductSKU")).Value.ToString().Equals(ProductSKU) )
-                                                    {
-                                                        wasteMaterial = whichObject;
-                                                        break;
-                                                    }
-                                                }
                                           
-                                           
-                                            <td class="text-center" style="border:.5px solid black ">@wasteMaterial.First(x => x.Key.Equals("DocumentRowQuantity")).Value.ToString()</td>
-                                               
-                                                qntWasteFound = false;
+                                        
+                                        }
+                                        else
+                                        {
+                                             
+                                            <td >-</td><td >-</td><td >-</td><td >-</td>                           
+                                        
+                                        }
+
+
+                                        for (j = 0; j < labonItem.Desc_ProductReceived.Count(); j++)
+                                        {
+                                            if (labonItem.FPKeys.ToArray()[j].Contains("y"))
+                                            {
+                                                flag = true;
                                                 break;
                                             }
                                         }
-                                        catch (Exception e) { continue; }
-                                    }
-                                    @if (qntWasteFound)
-                                    {
-                                        <td class="text-center" style="border:.5px solid black ">-</td>
-                                    }
-                                   
-                                    @foreach (Dictionary<string, object> qused in selecteddocuments)
-                                    {
-                                        //DocumentParentDocId
-                                        try
+                                        if (flag)
                                         {
-                                            if (qused.First(x => x.Key.Equals("DocumentComments")).Value.ToString().ToLower().Contains("receive") && qused.First(x=>x.Key.Equals("DocumentTags")).Value.ToString().Equals(dox))
+                                            flag = false;
+                                            if (labonItem.QNT_1_Waste.Count() > i)
+                                             { 
+                                               <td>@labonItem.QNT_1_Waste.ToArray()[j]</td>
+                                             }
+                                             else
+                                             {
+                                                  <td>-</td>
+                                             }
+                                              if (labonItem.SKU_ProductReceived.Count() > i)
+                                             { 
+                                               <td>@labonItem.SKU_ProductReceived.ToArray()[j]</td>
+                                             }
+                                             else
+                                             {
+                                                  <td>-</td>
+                                             }
+
+                                              if (labonItem.Desc_ProductReceived.Count() > i)
+                                             { 
+                                               <td>@labonItem.Desc_ProductReceived.ToArray()[j]</td>
+                                             }
+                                             else
+                                             {
+                                                  <td>-</td>
+                                             }
+
+                                              if (labonItem.QNT_Received.Count() > i)
+                                             { 
+                                               <td>@labonItem.QNT_Received.ToArray()[j]</td>
+                                             }
+                                             else
+                                             {
+                                                  <td>-</td>
+                                             }
+
+                                        
+                                        }
+                                        else
+                                        {
+                                         
+                                            <td >-</td><td >-</td><td >-</td><td >-</td>                           
+                                         
+                                        }
+
+                                        for (j = 0; j < labonItem.Desc_ProductReceived.Count(); j++)
+                                        {
+                                            if (labonItem.FPKeys.ToArray()[j].Contains("eave") || labonItem.FPKeys.ToArray()[j].Contains("oat"))
                                             {
-                                                object[] obs3 = (object[])qused.First(x => x.Key.Equals("DocumentDetails")).Value;
-                                                Dictionary<string, object> products2 = (Dictionary<string, object>)obs3[0];
-                                                string ProductSKU2 = products2.First(x => x.Key.Equals("DocumentRowProductSKU")).Value.ToString();
-                                                string ProductDesciption2 = "";
-                                                foreach (Dictionary<string, object> prod2 in Products)
-                                                {
-                                                    if (prod2.First(x => x.Key.Equals("ProductSKU")).Value.ToString().Equals(ProductSKU2))
-                                                    {
-                                                        ProductDesciption2 = prod2.First(x => x.Key.Equals("ProductDescription")).Value.ToString();
-                                                    }
-                                                }
-                                                if(doc==0)
-                                              {
-                                            <td class="text-center" style="border:.5px solid black ">@ProductSKU2</td>
-                                            <td class="text-center" style="border:.5px solid black ">@ProductDesciption2</td>
-                                            <td class="text-center" style="border:.5px solid black ">@qused.First(x => x.Key.Equals("DocumentTotalQuantity")).Value.ToString()</td>
-                                          double totalQuatity = qntReturned + qntWaste + qntUsed;
-                                        <td class="text-center" style="border:.5px solid black ">@qntReturned + @qntWaste + @qntUsed = @totalQuatity</td>
-                                                }
-                                                else
-                                                {
-                                                    
-                                                      <td  class="text-center" style="border:.5px solid black "><div hidden>@ProductSKU2</div></td>
-                                            <td class="text-center" style="border:.5px solid black "><div hidden>@ProductDesciption2</div></td>
-                                            <td class="text-center" style="border:.5px solid black "><div hidden>@qused.First(x => x.Key.Equals("DocumentTotalQuantity")).Value.ToString()</div></td>
-                                          double totalQuatity = qntReturned + qntWaste + qntUsed;
-                                        <td class="text-center" style="border:.5px solid black "><div hidden> @totalQuatity</div></td>
-                                                }
-                                       
+                                                flag = true;
+                                                break;
+                                            }
                                         }
+                                        if (flag)
+                                        {
+                                            flag = false;
+                                          if (labonItem.QNT_1_Waste.Count() > i)
+                                             { 
+                                               <td>@labonItem.QNT_1_Waste.ToArray()[j]</td>
+                                             }
+                                             else
+                                             {
+                                                  <td>-</td>
+                                             }
+                                              if (labonItem.SKU_ProductReceived.Count() > i)
+                                             { 
+                                               <td>@labonItem.SKU_ProductReceived.ToArray()[j]</td>
+                                             }
+                                             else
+                                             {
+                                                  <td>-</td>
+                                             }
+
+                                              if (labonItem.Desc_ProductReceived.Count() > i)
+                                             { 
+                                               <td>@labonItem.Desc_ProductReceived.ToArray()[j]</td>
+                                             }
+                                             else
+                                             {
+                                                  <td>-</td>
+                                             }
+
+                                              if (labonItem.QNT_Received.Count() > i)
+                                             { 
+                                               <td>@labonItem.QNT_Received.ToArray()[j]</td>
+                                             }
+                                             else
+                                             {
+                                                  <td>-</td>
+                                             }
+
+                                         
                                         }
-                                        catch (Exception e) { continue; }
-                                    }
-                                     
+                                        else
+                                        {
+                                          
+                                            <td >-</td><td >-</td><td >-</td><td >-</td>                           
+                                         
+                                        }
 
 
-                                </tr>
-                    }
-                    }
+
+                                        for (j = 0; j < labonItem.Desc_ProductReceived.Count(); j++)
+                                        {
+                                            if (labonItem.FPKeys.ToArray()[j].Contains("nish"))
+                                            {
+                                                flag = true;
+                                                break;
+                                            }
+                                        }
+                                        if (flag)
+                                        {
+                                            flag = false;
+                                             if (labonItem.QNT_1_Waste.Count() > i)
+                                             { 
+                                               <td>@labonItem.QNT_1_Waste.ToArray()[j]</td>
+                                             }
+                                             else
+                                             {
+                                                  <td>-</td>
+                                             }
+                                              if (labonItem.SKU_ProductReceived.Count() > i)
+                                             { 
+                                               <td>@labonItem.SKU_ProductReceived.ToArray()[j]</td>
+                                             }
+                                             else
+                                             {
+                                                  <td>-</td>
+                                             }
+
+                                              if (labonItem.Desc_ProductReceived.Count() > i)
+                                             { 
+                                               <td>@labonItem.Desc_ProductReceived.ToArray()[j]</td>
+                                             }
+                                             else
+                                             {
+                                                  <td>-</td>
+                                             }
+
+                                              if (labonItem.QNT_Received.Count() > i)
+                                             { 
+                                               <td>@labonItem.QNT_Received.ToArray()[j]</td>
+                                             }
+                                             else
+                                             {
+                                                  <td>-</td>
+                                             }
+
+                                         
+                                        }
+                                        else
+                                        {
+                                          
+                                            <td >-</td><td >-</td><td >-</td><td >-</td>                           
+                                         
+                                        }
+                    
+                                    
+                                 }
+                                 else
+                                 {
+                                      <td >-</td><td >-</td><td >-</td>  
+                                      <td >-</td><td >-</td><td >-</td><td >-</td>     
+                                      <td >-</td><td >-</td><td >-</td><td >-</td>   
+                                      <td >-</td><td >-</td><td >-</td><td >-</td>  
+                                      <td >-</td><td >-</td><td >-</td><td >-</td>         
+                                 }
+                                                
+                        
+                             </tr>
+                        }
+                        catch (Exception ee) 
+                       { 
+                        
+                        <h2>@ee.Data</h2>
+                        }
+                     } 
+                   
+                    
+                      
                 }
                 
+
+
             </tbody>
 
+           
             <tfoot>
                 <tr>
                     <th style="border: .5px solid black; width: 3%;">Sr#</th>
                     <th style="border: .5px solid black; width: 12%;">Date</th>
                     <th style="border: .5px solid black; width: 12%;">Sub Supplier Name</th>
+                    <th style="border: .5px solid black; width: 10%;">Tracking Code</th>
                     <th style="border: .5px solid black; width: 10%;">Code</th>
                     <th style="border: .5px solid black; width: 8%;">Description</th>
                     <th style="border: .5px solid black; width: 18%;">QNT Sent</th>
                     <th style="border: .5px solid black; width: 3%;">QNT Used</th>
-
-
-                    <th style="border: .5px solid black; width: 8%;">Waste</th>
                     <th style="border: .5px solid black; width: 8%;">Returned QNT</th>
+                    <th style="border: .5px solid black; width: 8%;">Waste Knitt</th>
                     <th style="border: .5px solid black; width: 8%;">Code</th>
                     <th style="border: .5px solid black; width: 8%;">Description</th>
-                    <th style="border: .5px solid black; width: 8%;">QNT Fabric</th>
-                    <th style="border: .5px solid black; width: 8%;">QNT Used + Wasted + Returned</th>
+                    <th style="border: .5px solid black; width: 8%;">QNT Fabric Knitt</th>
+
+                    <th style="border: .5px solid black; width: 8%;">Waste Wash</th>
+                    <th style="border: .5px solid black; width: 8%;">Code</th>
+                    <th style="border: .5px solid black; width: 8%;">Description</th>
+                    <th style="border: .5px solid black; width: 8%;">QNT Fabric Washed</th>
+
+                    <th style="border: .5px solid black; width: 8%;">Waste Dying</th>
+                    <th style="border: .5px solid black; width: 8%;">Code</th>
+                    <th style="border: .5px solid black; width: 8%;">Description</th>
+                    <th style="border: .5px solid black; width: 8%;">QNT Fabric Dyed</th>
+
+                    <th style="border: .5px solid black; width: 8%;">Waste Weaving</th>
+                    <th style="border: .5px solid black; width: 8%;">Code</th>
+                    <th style="border: .5px solid black; width: 8%;">Description</th>
+                    <th style="border: .5px solid black; width: 8%;">QNT Fabric Weaved</th>
+
+                    <th style="border: .5px solid black; width: 8%;">Waste Finishing</th>
+                    <th style="border: .5px solid black; width: 8%;">Code</th>
+                    <th style="border: .5px solid black; width: 8%;">Description</th>
+                    <th style="border: .5px solid black; width: 8%;">QNT Fabric Finished</th>
                 </tr>
             </tfoot>
         </table>
