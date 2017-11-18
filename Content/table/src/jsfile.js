@@ -2,6 +2,7 @@
 'use strict';
 
 $$1 = 'default' in $$1 ? $$1['default'] : $$1;
+var Val1 =0, Val2 = 0, Val3=0, Val4 =0;
 
 var FilterMenu = function () {
     function FilterMenu(th, col) {
@@ -22,6 +23,7 @@ var FilterMenu = function () {
         $(document).click(function (el) {
             if (!$menu.is(el.target) && $menu.has(el.target).length === 0) {
                 $content.hide();
+
             }
         });
     };
@@ -258,8 +260,43 @@ var FilterCollection = function () {
             }).reduce(function (prevSelected, nextSelected) {
                 return prevSelected && nextSelected;
             }, true);
-            visible ? $row.show() : $row.hide();
+            if (visible == true)
+            {
+                
+                var myStr = row.cells.item(8).innerHTML;
+                myStr = myStr.replace(/,/g, "");
+                Val1 += parseFloat(myStr);
+
+                myStr = row.cells.item(10).innerHTML;
+                myStr = myStr.replace(/,/g, "");
+                Val2 += parseFloat(myStr);
+
+                myStr = row.cells.item(12).innerHTML;
+                myStr = myStr.replace(/,/g, "");
+                Val3 += parseFloat(myStr);
+
+                myStr = row.cells.item(13).innerHTML;
+                myStr = myStr.replace(/,/g, "");
+                Val4 += parseFloat(myStr);
+                
+                $row.show();
+            }
+            else
+            {
+                $row.hide();
+            }
+            
         });
+        var myTab = document.getElementById('table2'); 
+        // LOOP THROUGH EACH ROW OF THE TABLE AFTER HEADER.
+        
+        var objCells = myTab.rows.item(myTab.rows.length - 1).cells;
+        objCells.item(8).innerHTML = Val1.toLocaleString('en-IN');
+       
+        objCells.item(10).innerHTML = Val2.toLocaleString('en-IN');
+        objCells.item(12).innerHTML = Val3.toLocaleString('en-IN');
+        objCells.item(13).innerHTML = Val4.toLocaleString('en-IN');
+        Val1 = 0; Val2 = 0; Val3 = 0; Val4 = 0;
     };
     FilterCollection.prototype.sort = function (column, order, table) {
         var rows, switching, i, x, y, shouldSwitch;

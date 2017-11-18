@@ -93,11 +93,13 @@
                 </tbody>
             </table>
             <a style="margin-top:2%" class="button" href="javascript:exportTableToCSV('Production Report.csv')">Export This Table to Excell</a>
-            <a style="margin-left:65%" href="javascript:makePDF()" class="button">Print this Document.</a>
+            <!--<button onclick="myFunction()" class="button">Apply Filters</button>-->
+            <a style="margin-left:35%" href="javascript:makePDF()" class="button">Print this Document.</a>
 
         </div><br />
 
         <h3 style="font-weight:bold;text-align:center;padding-top:3px; padding-bottom:2px; border-bottom: 2px solid #000000; border-top: 2px solid #000000;margin-bottom:15px">Production Report </h3>
+
         <div class="container" style="margin-left:-10px">
             <div class="row">
                 <div class="col-md-12">
@@ -125,7 +127,7 @@
                             </tr>
                         </thead>
 
-                        <tbody>
+                        <tbody >
                             @foreach (Dictionary<string, object> salesObj in WorkOrders)
                             {
                                 string status = salesObj.First(x => x.Key.Equals("WorkOrderStatus")).Value.ToString();
@@ -201,31 +203,42 @@
                                     </tr>
                                 }
                             }
-                            <tr>
-                                <td style="border: .5px solid black; ">-</td>
-                                <td style="border: .5px solid black; ">-</td>
-                                <td style="border: .5px solid black; ">-</td>
-                                <td style="border: .5px solid black; ">-</td>
-                                <td style="border: .5px solid black; ">-</td>
-                                <td style="border: .5px solid black; ">-</td>
-                                <td style="border: .5px solid black; ">-</td>
-                                <td style="border: .5px solid black; ">-</td>
-                                <td style="border: .5px solid black; ">@grandOverHead</td>
-                                <td style="border: .5px solid black; ">-</td>
-                                <td style="border: .5px solid black; ">@grandLabor</td>
-                                <td style="border: .5px solid black; ">-</td>
-                                <td style="border: .5px solid black; ">@grandRawMaterial</td>
-                                @{
-                                    double grand = grandRawMaterial + grandOverHead + grandLabor;
-                                }
-                                <td style="border: .5px solid black; ">@grand</td>
-                                <td style="border: .5px solid black; ">-</td>
-
-                            </tr>
+                          
 
                         </tbody>
  
                     </table>
+                    <div style="width:133%">
+                    <table id="table2" class="table table-bordered table-intel">
+                        <tbody>
+                            <tr style="background-color: #ebe9e9">
+                                <td style="border: .5px solid black; ">---------</td>
+                                <td style="border: .5px solid black; ">----------</td>
+                                <td style="border: .5px solid black; ">----------</td>
+                                <td style="border: .5px solid black; ">-----------</td>
+                                <td style="border: .5px solid black; ">-----------</td>
+                                <td style="border: .5px solid black; ">-----------</td>
+                                <td style="border: .5px solid black; ">-----------</td>
+                                <td style="border: .5px solid black; ">-----------</td>
+                               
+                                <td style="border: .5px solid black; "> @Convert.ToDecimal(grandOverHead).ToString("#,##0.00")</td>
+                                <td style="border: .5px solid black; ">--</td>
+                                
+                                <td style="border: .5px solid black; ">@Convert.ToDecimal(grandLabor).ToString("#,##0.00")</td>
+                                <td style="border: .5px solid black; ">--</td>
+                                
+                                <td style="border: .5px solid black; ">@Convert.ToDecimal(grandRawMaterial).ToString("#,##0.00")</td>
+                                @{
+                                    double grand = grandRawMaterial + grandOverHead + grandLabor;
+                                }
+                                
+                                <td style="border: .5px solid black; ">@Convert.ToDecimal(grand).ToString("#,##0.00")</td>
+                                <td style="border: .5px solid black; ">--</td>
+
+                            </tr>
+                        </tbody>
+                    </table>
+                        </div>
                 </div>
             </div>
         </div>
@@ -234,13 +247,39 @@
 
             $(function () {
                 // Apply the plugin
-                $('#table').excelTableFilter();
+                $('#table').excelTableFilter(); 
             });
-
+         
         </script>
 
     </div> 
                 <script>
+                    function myFunction() {
+                         
+                        alert("Inside");
+                        var myTab = document.getElementById('table');
+
+                        var Val1 =0, Val2 = 0, Val3=0, Val4 =0;
+                        // LOOP THROUGH EACH ROW OF THE TABLE AFTER HEADER.
+                        for (i = 1; i < myTab.rows.length-1; i++) {
+
+                            // GET THE CELLS COLLECTION OF THE CURRENT ROW.
+                            var objCells = myTab.rows.item(i).cells;
+
+                             Val1 += parseFloat(objCells.item(8).innerHTML);
+                             Val2 += parseFloat(objCells.item(10).innerHTML);
+                             Val3 += parseFloat(objCells.item(12).innerHTML);
+                             Val4 += parseFloat(objCells.item(13).innerHTML);
+                             
+                        }
+                        var objCells = myTab.rows.item(myTab.rows.length - 1).cells;
+                        objCells.item(8).innerHTML = Val1;
+                        objCells.item(10).innerHTML = Val2;
+                        objCells.item(12).innerHTML = Val3;
+                        objCells.item(13).innerHTML = Val4;
+                        alert("Submitted");
+                        
+                    }
                     function downloadCSV(csv, filename) {
                         var csvFile;
                         var downloadLink;
@@ -282,6 +321,7 @@
                         // Download CSV file
                         downloadCSV(csv.join("\n"), filename);
                     }
+
                 </script>
 
 
