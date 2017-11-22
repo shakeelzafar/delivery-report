@@ -94,7 +94,7 @@
             </table>
             <a style="margin-top:2%" class="button" href="javascript:exportTableToCSV('Production Report.csv')">Export This Table to Excell</a>
             <!--<button onclick="myFunction()" class="button">Apply Filters</button>-->
-            <a style="margin-left:35%" href="javascript:makePDF()" class="button">Print this Document.</a>
+            <a style="margin-left:65%" href="javascript:makePDF()" class="button">Print this Document.</a>
 
         </div><br />
 
@@ -109,6 +109,8 @@
 
                                 <th style="border: .5px solid black; width: 3%;">Sr#</th>
                                 <th style="border: .5px solid black; width: 12%;">Date</th>
+                                <th style="border: .5px solid black; width: 12%;">WorkOrder Comment</th>
+                                <th style="border: .5px solid black; width: 12%;">WorkOrder Tags</th>
                                 <th style="border: .5px solid black; width: 12%;">WorkOrder No</th>
 
                                 <th style="border: .5px solid black; width: 18%;">SKU</th>
@@ -184,6 +186,8 @@
 
                                         <td class="text-center" style="border: .5px solid black; background-color: #f2f4f7;">@srNo</td>
                                         <td class="text-center" style="border: .5px solid black; background-color: #d89c6e;">@actualDate</td>
+                                        <td class="text-center" style="border:.5px solid black ">@salesObj.First(x => x.Key.Equals("WorkOrderComments")).Value.ToString()</td>
+                                        <td class="text-center" style="border:.5px solid black ">@salesObj.First(x => x.Key.Equals("WorkOrderTags")).Value.ToString()</td>
                                         <td class="text-center" style="border:.5px solid black ">@salesObj.First(x => x.Key.Equals("WorkOrderNo")).Value.ToString()</td>
                                         <td class="text-center" style="border:.5px solid black ">@productSKKU</td>
                                         <td class="text-center" style="border:.5px solid black ">@ProductDescription</td>
