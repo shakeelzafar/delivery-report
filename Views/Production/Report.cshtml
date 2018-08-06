@@ -3,6 +3,10 @@
    
     List<Dictionary<string, object>> WorkOrders = (List<Dictionary<string, object>>)Session["WorkOrders"];
     List<Dictionary<string, object>> Products = (List<Dictionary<string, object>>)Session["Products"];
+      if (WorkOrders.Count() > 100)
+            {
+                WorkOrders = WorkOrders.Take(100).ToList();
+            }
     int srNo = 0;
     double grandOverHead = 0, grandLabor = 0, grandRawMaterial = 0;
 }
