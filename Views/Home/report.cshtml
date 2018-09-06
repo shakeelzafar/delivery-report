@@ -1,10 +1,10 @@
 ﻿@{
     Layout = null;
     List<Dictionary<string, object>> SalesOrders = (List<Dictionary<string, object>>)Session["SalesOrders"];
-     //if (SalesOrders.Count() > 100)
-       //     {
-         //       SalesOrders = SalesOrders.Take(100).ToList();
-           // }
+     if (SalesOrders.Count() > 100)
+           {
+               SalesOrders = SalesOrders.Take(100).ToList();
+            }
     List<Dictionary<string, object>> PurchaseOrders = (List<Dictionary<string, object>>)Session["PurchaseOrders"];
     List<Dictionary<string, object>> WorkOrders = (List<Dictionary<string, object>>)Session["WorkOrders"];
     //List<Dictionary<string, object>> Products = (List<Dictionary<string, object>>)Session["Products"];
