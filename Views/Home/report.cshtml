@@ -3,7 +3,7 @@
     List<Dictionary<string, object>> SalesOrders = (List<Dictionary<string, object>>)Session["SalesOrders"];
      if (SalesOrders.Count() > 100)
            {
-               SalesOrders = SalesOrders.Take(100).ToList();
+               SalesOrders = SalesOrders.Take(10).ToList();
             }
     List<Dictionary<string, object>> PurchaseOrders = (List<Dictionary<string, object>>)Session["PurchaseOrders"];
     List<Dictionary<string, object>> WorkOrders = (List<Dictionary<string, object>>)Session["WorkOrders"];
