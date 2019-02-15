@@ -1,10 +1,10 @@
 ﻿@{
     Layout = null;
     List<Dictionary<string, object>> SalesOrders = (List<Dictionary<string, object>>)Session["SalesOrders"];
-     if (SalesOrders.Count() > 100)
+     /*if (SalesOrders.Count() > 100)
            {
-               SalesOrders = SalesOrders.Take(10).ToList();
-            }
+               SalesOrders = SalesOrders.Take(100).ToList();
+            }*/
     List<Dictionary<string, object>> PurchaseOrders = (List<Dictionary<string, object>>)Session["PurchaseOrders"];
     List<Dictionary<string, object>> WorkOrders = (List<Dictionary<string, object>>)Session["WorkOrders"];
     //List<Dictionary<string, object>> Products = (List<Dictionary<string, object>>)Session["Products"];
@@ -70,17 +70,9 @@
 
 
     <div id="content">
-
+<h2>Delivery Report:</h2>
     <div>
-        <table style="width:100%;border-collapse:collapse; " width="100%">
-            <tbody>
-                <tr><td rowspan="5" style="border:1px solid black;padding:5px; "><div style="width:90%"><img src="../../Content/logo20.png"/></div> </td><td colspan="2" rowspan="1" style="border: 1px solid black; padding: 5px; text-align: center;"><span style="font-size: 10pt;"><span style="font-size: 10pt;"><strong><a style="background-color: #f2f4f7; text-decoration-style: initial; text-decoration-color: initial;">Email: sales@profineworld.com,&nbsp;&nbsp;</a><a target="_blank" style="background-color: #f2f4f7; text-decoration-style: initial; text-decoration-color: initial;">www.profineworld.com</a></strong></span><span style="font-size: 10pt;">&nbsp;</span></span></td></tr>
-                <tr><td class="text-center" style="border:1px solid black;padding:5px;width:30% "><div><p style="font-weight:bold;text-align:center"><span style="font-size: 12pt;">Display &amp; head office</span></p></div></td><td class="text-center" style="border:1px solid black;padding:5px;width:40%;"><div><p style="font-weight:bold;text-align:center"><span style="font-size: 12pt;">Gulberg Display</span></p></div></td></tr>
-                <tr><td class="text-center" style="border:1px solid black;padding:5px"><div><p style="text-align:center"><span style="font-size: 12pt;"><span style="font-size: 12pt;"><span style="font-size: 12pt;">6 Mecleod Road, Lahore,Tel:042-37226257,Cell: 03244896776</span>  </span></span></p></div></td><td class="text-center" style="border:1px solid black;padding:5px"><div><p style="text-align:center"><span style="font-size: 12pt;">119-P M.M Alam road, Gulberg 2,Lahore, Tel:042-35778848, Cell: 0302-8427699</span></p></div></td></tr>
-
-                <tr><td rowspan="2" colspan="2" style="border-bottom:1px solid black; border-right:1px solid black"><div><p style="font-weight:bold;text-align:center; margin-bottom:-3px; "><span style="font-size: 12pt;">Islamabad Dealership</span></p><p style="text-align:center;font-size: 12pt; ">Plaza #: 39, Main Golra Rd, Service Lane, Near Audi Center, Islamabad, Tel: 051 5495731</p></div></td></tr>
-            </tbody>
-        </table>
+      
         <a style="margin-top:2%" class="button"  href="javascript:exportTableToCSV('Delivery Report.csv')">Export This Table to Excell</a>
          <a  style="margin-left:65%" href="javascript:makePDF()" class="button">Print this Document.</a>
        
