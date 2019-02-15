@@ -1,0 +1,80 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!--
+This file is used by the publish/package process of your Web project. You can customize the behavior of this process
+by editing this MSBuild file. In order to learn more about this please visit http://go.microsoft.com/fwlink/?LinkID=208121. 
+-->
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <LastUsedBuildConfiguration>Release</LastUsedBuildConfiguration>
+    <LastUsedPlatform>Any CPU</LastUsedPlatform>
+    <TimeStampOfAssociatedLegacyPublishXmlFile />
+  </PropertyGroup>
+  <ItemGroup>
+    <File Include="bin/megaventory-delivery-report.dll">
+      <publishTime>01/07/2019 18:04:28</publishTime>
+    </File>
+    <File Include="bin/Microsoft.Web.Infrastructure.dll">
+      <publishTime>11/15/2018 11:59:14</publishTime>
+    </File>
+    <File Include="bin/Newtonsoft.Json.dll">
+      <publishTime>11/15/2018 11:59:13</publishTime>
+    </File>
+    <File Include="bin/System.Net.Http.Formatting.dll">
+      <publishTime>11/15/2018 11:59:15</publishTime>
+    </File>
+    <File Include="bin/System.Web.Helpers.dll">
+      <publishTime>11/15/2018 11:59:14</publishTime>
+    </File>
+    <File Include="bin/System.Web.Http.dll">
+      <publishTime>11/15/2018 11:59:16</publishTime>
+    </File>
+    <File Include="bin/System.Web.Http.WebHost.dll">
+      <publishTime>11/15/2018 11:59:16</publishTime>
+    </File>
+    <File Include="bin/System.Web.Mvc.dll">
+      <publishTime>11/15/2018 11:59:15</publishTime>
+    </File>
+    <File Include="bin/System.Web.Razor.dll">
+      <publishTime>11/15/2018 11:59:14</publishTime>
+    </File>
+    <File Include="bin/System.Web.WebPages.Deployment.dll">
+      <publishTime>11/15/2018 11:59:14</publishTime>
+    </File>
+    <File Include="bin/System.Web.WebPages.dll">
+      <publishTime>11/15/2018 11:59:14</publishTime>
+    </File>
+    <File Include="bin/System.Web.WebPages.Razor.dll">
+      <publishTime>11/15/2018 11:59:14</publishTime>
+    </File>
+    <File Include="Global.asax">
+      <publishTime>11/15/2018 11:59:12</publishTime>
+    </File>
+    <File Include="packages.config">
+      <publishTime>11/15/2018 11:59:16</publishTime>
+    </File>
+    <File Include="Views/Home/Index.cshtml">
+      <publishTime>01/07/2019 17:40:16</publishTime>
+    </File>
+    <File Include="Views/Home/PurchaseOrderGet.cshtml">
+      <publishTime>01/07/2019 18:06:06</publishTime>
+    </File>
+    <File Include="Views/Home/report.cshtml">
+      <publishTime>01/07/2019 18:06:11</publishTime>
+    </File>
+    <File Include="Views/Home/SalesOrderGet.cshtml">
+      <publishTime>01/07/2019 17:50:44</publishTime>
+    </File>
+    <File Include="Views/Home/SupplierClientGet.cshtml">
+      <publishTime>01/07/2019 18:06:20</publishTime>
+    </File>
+    <File Include="Views/Home/WorkOrderGet.cshtml">
+      <publishTime>01/07/2019 18:06:27</publishTime>
+    </File>
+    <File Include="Views/Web.config">
+      <publishTime>11/15/2018 11:59:12</publishTime>
+    </File>
+    <File Include="Web.config">
+      <publishTime>01/07/2019 18:06:33</publishTime>
+    </File>
+  </ItemGroup>
+</Project>

@@ -1,0 +1,419 @@
+﻿@{
+    Layout = null;
+    List<Dictionary<string, object>> SalesOrders = (List<Dictionary<string, object>>)Session["SalesOrders"];
+     /*if (SalesOrders.Count() > 100)
+           {
+               SalesOrders = SalesOrders.Take(100).ToList();
+            }*/
+    List<Dictionary<string, object>> PurchaseOrders = (List<Dictionary<string, object>>)Session["PurchaseOrders"];
+    List<Dictionary<string, object>> WorkOrders = (List<Dictionary<string, object>>)Session["WorkOrders"];
+    //List<Dictionary<string, object>> Products = (List<Dictionary<string, object>>)Session["Products"];
+    List<Dictionary<string, object>> SupplierClients = (List<Dictionary<string, object>>)Session["SupplierClients"];
+    int srNo = 0;
+}
+<html>
+<head>
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.15/css/jquery.dataTables.min.css">
+    <title>Delivery Report Table</title>
+
+</head>
+<body style="background-color: #f2f4f7; min-height: 841.89px">
+
+
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/0.4.1/html2canvas.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/0.4.1/html2canvas.min.js"></script>
+
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.0.272/jspdf.debug.js"></script>
+    <script type='text/javascript'>
+        function makePDF() {
+            html2canvas(document.body, {
+                onrendered: function (canvas) {
+
+                    var contentWidth = canvas.width;
+                    var contentHeight = canvas.height;
+
+                    //The height of the canvas which one pdf page can show;
+                    var pageHeight = contentWidth / 592.28 * 841.89;
+                    //the height of canvas that haven't render to pdf
+                    var leftHeight = contentHeight;
+                    //addImage y-axial offset
+                    var position = 0;
+                    //a4 format [595.28,841.89]
+                    var imgWidth = 595.28;
+                    var imgHeight = 592.28 / contentWidth * contentHeight;
+
+                    var pageData = canvas.toDataURL('image/jpeg', 1.0);
+
+                    var pdf = new jsPDF('', 'pt', 'a4');
+
+                    if (leftHeight < pageHeight) {
+                        pdf.addImage(pageData, 'JPEG', 0, 40, imgWidth, imgHeight);
+                    } else {
+                        while (leftHeight > 0) {
+                            pdf.addImage(pageData, 'JPEG', 0, position, imgWidth, imgHeight)
+                            leftHeight -= pageHeight;
+                            position -= 841.89;
+                            //avoid blank page
+                            if (leftHeight > 0) {
+                                pdf.addPage();
+                            }
+                        }
+                    }
+
+                    pdf.save('Delivery Report.pdf');
+                }
+            })
+
+        }
+    </script>
+
+
+
+    <div id="content">
+<h2>Delivery Report:</h2>
+    <div>
+      
+        <a style="margin-top:2%" class="button"  href="javascript:exportTableToCSV('Delivery Report.csv')">Export This Table to Excell</a>
+         <a  style="margin-left:65%" href="javascript:makePDF()" class="button">Print this Document.</a>
+       
+    </div><br />
+    
+    <h3 style="font-weight:bold;text-align:center;padding-top:3px; padding-bottom:2px; border-bottom: 2px solid #000000; border-top: 2px solid #000000;margin-bottom:15px">Delivery Products Report </h3>
+    <table id="example" cellspacing="0" width="100%">
+        <thead>
+            <tr>
+                <th style="border: .5px solid black; width: 3%;">Sr#</th>
+                <th style="border: .5px solid black; width: 12%;">Date</th>
+                <th style="border: .5px solid black; width: 12%;">Due Date</th>
+                <th style="border: .5px solid black; width: 8%;">Receipt #</th>
+                <th style="border: .5px solid black; width: 18%;">Customer and Product detials</th>
+                <th style="border: .5px solid black; width: 10%;">Special Instructions</th>
+                <th style="border: .5px solid black; width: 3%;">Qty.</th>
+                <th style="border: .5px solid black; width: 10%;">Phone No.</th>
+                <th style="border: .5px solid black; width: 10%;">Status</th>
+                
+                <th style="border: .5px solid black; width: 8%;">Balance Amount</th>
+                <th style="border: .5px solid black; width: 8%;">Recived Amount</th>
+                <th style="border: .5px solid black; width: 8%;">Invoice Value</th>
+            </tr>
+        </thead>
+      
+        <tbody>
+            @foreach (Dictionary<string, object> salesObj in SalesOrders)
+            { 
+                string status = salesObj.First(x => x.Key.Equals("SalesOrderStatus")).Value.ToString();
+                if(!status.Equals("Cancelled"))
+                {
+                    double balanceAmount = 0;
+                    double receivedAmount = 0;
+                    double grandTotal = double.Parse(salesObj.First(x => x.Key.Equals("SalesOrderAmountGrandTotal")).Value.ToString());
+                   
+                    try{
+                       receivedAmount  = double.Parse(salesObj.First(x => x.Key.Equals("SalesOrderReferenceNo")).Value.ToString());
+                       balanceAmount = grandTotal - receivedAmount;
+                    }catch(Exception e)
+                    {
+                        balanceAmount = grandTotal;
+                    }
+                    string saleObjectNo = salesObj.First(x => x.Key.Equals("SalesOrderNo")).Value.ToString();
+                    bool exists = false;
+                    String[] Months = { "January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December" };
+                    string iString = salesObj.First(x => x.Key.Equals("SalesOrderCreationDate")).Value.ToString();
+                    DateTime d = Convert.ToDateTime(iString);
+                    String day = d.Day.ToString().Length < 2 ? "0" + d.Day.ToString() : d.Day.ToString();
+                    String actualDate = day + "-" + Months[int.Parse(d.Month.ToString()) - 1] + "-" + d.Year.ToString();
+                    srNo++;
+                    String actualDate2="";
+                    iString = salesObj.First(x => x.Key.Equals("SalesOrderCustomOrderDate1")).Value.ToString();
+                    if (!iString.Contains("0001-01-01"))
+                    {
+                        d = Convert.ToDateTime(iString);
+                        day = d.Day.ToString().Length < 2 ? "0" + d.Day.ToString() : d.Day.ToString();
+                        actualDate2 = day + "-" + Months[int.Parse(d.Month.ToString()) - 1] + "-" + d.Year.ToString();
+                       if(actualDate2.Equals("01-January-2001"))
+                       {
+                           actualDate2 = "";
+                       }if(d.Year.ToString().Equals("0001") || d.Year.ToString().Equals("1"))
+                       {
+                           actualDate2 = "";
+                       }
+                    }
+                    else { actualDate2 = ""; }
+                    <tr style="background-color: #d89c6e">
+                    
+                        <td class="text-center" style="border: .5px solid black; background-color: #f2f4f7;">@srNo</td>
+                        <td class="text-center" style="border: .5px solid black; background-color: #d89c6e;">@actualDate</td>
+                      
+                        <td class="text-center" style="border:.5px solid black ">@actualDate2</td>
+                        <td class="text-center" style="border:.5px solid black ">@salesObj.First(x => x.Key.Equals("SalesOrderNo")).Value.ToString()</td>
+                        @foreach (Dictionary<string, object> client in SupplierClients)
+                        {
+                            if (salesObj.First(x => x.Key.Equals("SalesOrderClientID")).Value.ToString().Equals(client.First(x => x.Key.Equals("SupplierClientID")).Value.ToString()))
+                            {
+                                <td class="text-left" style="border:.5px solid black ">@client.First(x => x.Key.Equals("SupplierClientName")).Value.ToString()</td>
+                            <td class="text-center" style="border:.5px solid black ">-</td>
+                                <td class="text-center" style="border:.5px solid black ">@salesObj.First(x => x.Key.Equals("SalesOrderTotalQuantity")).Value.ToString()</td>
+                                <td class="text-center" style="border:.5px solid black ">@client.First(x => x.Key.Equals("SupplierClientPhone1")).Value.ToString()</td>
+                            }
+
+                        }
+
+
+                  
+                        <td class="text-center" style="border:.5px solid black ">@salesObj.First(x => x.Key.Equals("SalesOrderStatus")).Value.ToString()</td>
+                        
+                        <td class="text-center" style="border:.5px solid black "> @Convert.ToDecimal(balanceAmount).ToString("#,##0.00")</td>
+                        <td class="text-center" style="border:.5px solid black ">@Convert.ToDecimal(receivedAmount).ToString("#,##0.00")</td>
+                        <td class="text-center" style="border:.5px solid black ">@Convert.ToDecimal(grandTotal).ToString("#,##0.00")</td>
+
+                    </tr>
+
+
+                    object[] obs = (object[])salesObj.First(x => x.Key.Equals("SalesOrderDetails")).Value;
+                            
+                    List<Dictionary<string, object>> OldWorkOrders = new List<Dictionary<string,object>>();
+                            //SalesOrderRowRemarks
+                    foreach (Dictionary<string, object> pros in obs)
+                    {
+                        string[] skus = { "complaint detail", "x1", "rm153", "f0001", "c0128", "d0001", "ser101", "ser102", "ser103", "ser104" };
+                        string SKU = pros.First(pp => pp.Key.Equals("SalesOrderRowProductSKU")).Value.ToString();
+                        bool skuExist = true;
+                        foreach(string str in skus)
+                        {
+                            if(SKU.ToLower().Equals(str))
+                            {
+                                skuExist = false;
+                                break;
+                            }
+                        }
+                        if(skuExist)
+                        {
+                            bool POstatus = true;
+                            srNo++;
+                           <tr>
+                               <td class="text-center" style="border: .5px solid black; background-color: #f2f4f7; ">@srNo</td>
+                            <td class="text-center" style="border: .5px solid black; background-color: #f2f4f7;"><div hidden>@actualDate</div></td>
+                            @foreach (Dictionary<string, object> purchase in PurchaseOrders)
+                            {
+                                if (!POstatus)
+                                {
+                                    break;
+                                }
+                                if (salesObj.First(x => x.Key.Equals("SalesOrderNo")).Value.ToString().Equals(purchase.First(x => x.Key.Equals("PurchaseOrderComments")).Value.ToString()))
+                                {
+
+
+                                    object[] obs2 = (object[])purchase.First(x => x.Key.Equals("PurchaseOrderDetails")).Value;
+
+                                    foreach (Dictionary<string, object> products in obs2)
+                                    {
+                                        if (!POstatus)
+                                        {
+                                            break;
+                                        }
+
+                                        if (pros.First(pp => pp.Key.Equals("SalesOrderRowProductSKU")).Value.ToString().Equals(products.First(pppp => pppp.Key.Equals("PurchaseOrderRowProductSKU")).Value.ToString()))
+                                        {
+                                            <td class="text-center" style="border: .5px solid black; background-color: #f2f4f7;">PO-@purchase.First(x => x.Key.Equals("PurchaseOrderNo")).Value.ToString()</td>
+                                            <td class="text-center" style="border: .5px solid black; background-color: #f2f4f7;">@pros.First(pp => pp.Key.Equals("SalesOrderRowProductSKU")).Value.ToString()</td>
+                                        
+                                            POstatus = false;
+                                               
+
+                                        <td class="text-left" style="border:.5px solid black ">@pros.First(x => x.Key.Equals("SalesOrderRowProductDescription")).Value.ToString()</td>
+                                 <td class="text-center" style="border:.5px solid black ">@pros.First(x => x.Key.Equals("SalesOrderRowRemarks")).Value.ToString()</td>
+                                        try
+                                        {
+                                            <td class="text-center" style="border:.5px solid black ">@pros.First(x => x.Key.Equals("SalesOrderRowQuantity")).Value.ToString().Split('.')[0]</td>
+                                        }
+                                        catch (Exception e)
+                                        {
+                                            <td class="text-center" style="border:.5px solid black ">@pros.First(x => x.Key.Equals("SalesOrderRowQuantity")).Value.ToString()</td>
+                                        }
+
+                                        <td class="text-center" style="border:.5px solid black ">-</td>
+                                        <td class="text-center" style="border:.5px solid black "><div hidden>@salesObj.First(x => x.Key.Equals("SalesOrderStatus")).Value.ToString()</div></td>
+                                            <!-- <td class="text-center" style="border:.5px solid black ">purchase.First(x => x.Key.Equals("PurchaseOrderStatus")).Value.ToString()</td>-->
+                                       
+                                        <td class="text-center" style="border:.5px solid black ">-</td>
+                                        <td class="text-center" style="border:.5px solid black ">-</td>
+                                        <td class="text-center" style="border:.5px solid black ">-</td>
+                                            break;
+                                        }
+                                    }
+
+                                }
+                                if (!POstatus)
+                                {
+                                    break;
+                                }
+
+                            }
+                            @if(POstatus)
+                            { 
+                               
+                                foreach (Dictionary<string, object>purchase in WorkOrders)
+                                {
+                                    bool Old = true; 
+                                    foreach(Dictionary<string, object> workOrder in OldWorkOrders)
+                                    {
+                                        if(purchase.First(w=>w.Key.Equals("WorkOrderNo")).Value.ToString().Equals(workOrder.First(ww=>ww.Key.Equals("WorkOrderNo")).Value.ToString()))
+                                        {
+                                            Old=false;
+                                            break;
+                                        }
+                                    }
+                                    if(Old)
+                                    { 
+                                            if (salesObj.First(x => x.Key.Equals("SalesOrderNo")).Value.ToString().Equals(purchase.First(x => x.Key.Equals("WorkOrderComments")).Value.ToString()))
+                                            {
+
+                                                OldWorkOrders.Add(purchase);
+                                                        <!--    <tr style="background-color:#6ecca4">-->
+                                                    POstatus = false;
+                                                    <td class="text-center" style="border: .5px solid black; background-color: #f2f4f7;">WO-@purchase.First(x => x.Key.Equals("WorkOrderNo")).Value.ToString()</td>
+                                                    <td class="text-center" style="border: .5px solid black; background-color: #f2f4f7;">@pros.First(pp => pp.Key.Equals("SalesOrderRowProductSKU")).Value.ToString()</td>
+                                                    <td class="text-left" style="border:.5px solid black ">@pros.First(x => x.Key.Equals("SalesOrderRowProductDescription")).Value.ToString()</td>
+                                 <td class="text-center" style="border:.5px solid black ">@pros.First(x => x.Key.Equals("SalesOrderRowRemarks")).Value.ToString()</td>
+                                                    try
+                                                    {
+                                                        <td class="text-center" style="border:.5px solid black ">@pros.First(x => x.Key.Equals("SalesOrderRowQuantity")).Value.ToString().Split('.')[0]</td>
+                                                    }
+                                                    catch (Exception e)
+                                                    {
+                                                        <td class="text-center" style="border:.5px solid black ">@pros.First(x => x.Key.Equals("SalesOrderRowQuantity")).Value.ToString()</td>
+                                                    }
+
+                                                    <td class="text-center" style="border:.5px solid black ">-</td>
+                                                    <td class="text-center" style="border:.5px solid black "><div hidden>@salesObj.First(x => x.Key.Equals("SalesOrderStatus")).Value.ToString()</div></td>
+                                    <!-- <td class="text-center" style="border:.5px solid black ">purchase.First(x => x.Key.Equals("PurchaseOrderStatus")).Value.ToString()</td>-->
+                                
+                                                    <td class="text-center" style="border:.5px solid black ">-</td>
+                                                    <td class="text-center" style="border:.5px solid black ">-</td>
+                                                    <td class="text-center" style="border:.5px solid black ">-</td>
+                                              
+                                                break;
+                                            }
+                                      }
+
+                               }
+                                if(POstatus)
+                                {
+                                    <td class="text-center" style="border: .5px solid black; background-color: #f2f4f7;">-</td>
+                                                    <td class="text-center" style="border: .5px solid black; background-color: #f2f4f7;">@pros.First(pp => pp.Key.Equals("SalesOrderRowProductSKU")).Value.ToString()</td>
+                                               
+                                                    <td class="text-left" style="border:.5px solid black ">@pros.First(x => x.Key.Equals("SalesOrderRowProductDescription")).Value.ToString()</td>
+                                <td class="text-center" style="border:.5px solid black ">@pros.First(x => x.Key.Equals("SalesOrderRowRemarks")).Value.ToString()</td>
+                                                try
+                                                {
+                                                    <td class="text-center" style="border:.5px solid black ">@pros.First(x => x.Key.Equals("SalesOrderRowQuantity")).Value.ToString().Split('.')[0]</td>
+                                                }
+                                                catch (Exception e)
+                                                {
+                                                    <td class="text-center" style="border:.5px solid black ">@pros.First(x => x.Key.Equals("SalesOrderRowQuantity")).Value.ToString()</td>
+                                                }
+
+                                                <td class="text-center" style="border:.5px solid black ">-</td>
+                                                <td class="text-center" style="border:.5px solid black "><div hidden>@salesObj.First(x => x.Key.Equals("SalesOrderStatus")).Value.ToString()</div></td>
+                                <!-- <td class="text-center" style="border:.5px solid black ">purchase.First(x => x.Key.Equals("PurchaseOrderStatus")).Value.ToString()</td>-->
+                                
+                                                <td class="text-center" style="border:.5px solid black ">-</td>
+                                                <td class="text-center" style="border:.5px solid black ">-</td>
+                                                <td class="text-center" style="border:.5px solid black ">-</td>
+                                }
+                               
+                            }
+                               
+                        </tr>
+                        }
+                    }  
+                 }
+             } 
+
+        </tbody>  
+
+        <tfoot>
+            <tr>
+                <th style="border: .5px solid black; width: 3%;">Sr#</th>
+                <th style="border: .5px solid black; width: 12%;">Date</th>
+                <th style="border: .5px solid black; width: 12%;">Due Date</th>
+                <th style="border: .5px solid black; width: 8%;">Receipt #</th>
+                <th style="border: .5px solid black; width: 18%;">Customer and Product detials</th>
+                <th style="border: .5px solid black; width: 10%;">Special Instructions</th>
+                <th style="border: .5px solid black; width: 3%;">Qty.</th>
+                <th style="border: .5px solid black; width: 10%;">Phone No.</th>
+                <th style="border: .5px solid black; width: 10%;">Status</th>
+
+                <th style="border: .5px solid black; width: 8%;">Balance Amount</th>
+                <th style="border: .5px solid black; width: 8%;">Recived Amount</th>
+                <th style="border: .5px solid black; width: 8%;">Invoice Value</th>
+            </tr>
+        </tfoot>
+    </table> 
+    <script type="text/javascript" charset="utf8" src="../../Content/jquery-1.8.2.min.js"></script>
+        <script type="text/javascript" charset="utf8" src="../../Content/jquery.dataTables.min.js"></script>
+    <script>
+
+        $(function () {
+            $("#example").dataTable();
+           
+        })
+       
+    </script>
+       
+        </div>
+
+
+    <script>
+        function downloadCSV(csv, filename) {
+            var csvFile;
+            var downloadLink;
+
+            // CSV file
+            csvFile = new Blob([csv], { type: "text/csv" });
+
+            // Download link
+            downloadLink = document.createElement("a");
+
+            // File name
+            downloadLink.download = filename;
+
+            // Create a link to the file
+            downloadLink.href = window.URL.createObjectURL(csvFile);
+
+            // Hide download link
+            downloadLink.style.display = "none";
+
+            // Add the link to DOM
+            document.body.appendChild(downloadLink);
+
+            // Click download link
+            downloadLink.click();
+        }
+        function exportTableToCSV(filename) {
+            var csv = [];
+            var rows = document.querySelectorAll("table tr");
+
+            for (var i = 4; i < rows.length; i++) {
+                var row = [], cols = rows[i].querySelectorAll("td, th");
+
+                for (var j = 0; j < cols.length; j++)
+                    row.push(cols[j].innerText);
+
+                csv.push(row.join(","));
+            }
+
+            // Download CSV file
+            downloadCSV(csv.join("\n"), filename);
+        }
+    </script>
+
+
+
+</body>
+</html>
+
+
+
+
+
